@@ -1,0 +1,249 @@
+.product-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: var(--aueb-grey);
+    border: 1px solid var(--aueb-border);
+    border-radius: 10px;
+    align-items: center;
+}
+
+.product-controls .search-box,
+.product-controls .sort-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    min-width: 200px;
+}
+
+.product-controls label {
+    font-weight: bold;
+    color: var(--aueb-maroon);
+    white-space: nowrap;
+}
+
+.product-controls input[type="text"],
+.product-controls select {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 0.95rem;
+}
+
+.product-controls input[type="text"]:focus,
+.product-controls select:focus {
+    outline: none;
+    border-color: var(--aueb-accent);
+    box-shadow: 0 0 0 3px rgba(0, 51, 102, 0.12);
+}
+
+.table-products {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    overflow-wrap: anywhere;
+}
+
+.table-products caption {
+    margin-bottom: 10px;
+    text-align: left;
+    font-weight: bold;
+}
+
+.table-products th,
+.table-products td {
+    padding: 12px;
+    border: 1px solid var(--aueb-border);
+    text-align: left;
+    vertical-align: middle;
+}
+
+.table-products th {
+    background: var(--aueb-maroon);
+    color: var(--white);
+    letter-spacing: 0.01em;
+}
+
+.table-products tbody tr:nth-child(even) {
+    background: #faf8f9;
+}
+
+.table-products tbody tr:hover {
+    background: #f5eef0;
+}
+
+.table-products img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-right: 10px;
+}
+
+.table-products a {
+    color: var(--aueb-accent);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* Counters & Aside Promo Card */
+aside .counters {
+    margin-bottom: 20px;
+}
+
+aside .counters p {
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+}
+
+aside .flipping-card {
+    position: relative;
+    width: 100%;
+    max-width: 300px;
+    height: 450px;
+    margin: 20px auto 0;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    text-align: center;
+    transform-style: preserve-3d;
+    transition: transform 1.2s ease-in-out;
+}
+
+aside .flipping-card:hover {
+    transform: rotateY(-180deg);
+}
+
+aside .flipping-card .offer,
+aside .flipping-card .front {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+    border: 1px solid var(--aueb-border);
+    border-radius: 10px;
+    box-shadow: 0 4px 14px rgba(40, 20, 25, 0.10);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+aside .flipping-card .offer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 12px;
+    background: var(--white);
+    transform: rotateY(180deg);
+}
+
+aside .flipping-card .offer .image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 230px;
+}
+
+aside .flipping-card .offer .image img {
+    display: block;
+    width: 100%;
+    max-width: 250px;
+    height: 100%;
+    object-fit: contain;
+}
+
+aside .flipping-card .offer .price {
+    margin-top: 8px;
+    color: var(--aueb-maroon);
+    font-size: 1.8rem;
+    font-weight: bold;
+}
+
+aside .flipping-card .offer .price .old_price {
+    margin-right: 8px;
+    color: #888;
+    font-size: 0.9rem;
+    text-decoration: line-through;
+}
+
+aside .flipping-card .offer h3 {
+    margin: 8px 0;
+    color: var(--aueb-maroon);
+    font-size: 1.15rem;
+    text-align: center;
+}
+
+aside .flipping-card .offer p {
+    margin: 5px 0;
+    color: var(--text-color);
+    font-size: 0.9rem;
+    line-height: 1.4;
+    text-align: center;
+}
+
+aside .flipping-card .offer button {
+    margin-top: auto;
+    margin-bottom: 12px;
+    padding: 11px 16px;
+    color: var(--white);
+    background: var(--aueb-maroon);
+    border: none;
+    border-radius: 7px;
+    font-family: inherit;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+aside .flipping-card .offer button:hover {
+    background: var(--aueb-maroon-dark);
+}
+
+aside .flipping-card .front {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background: linear-gradient(to bottom, var(--white), #aaa);
+    text-align: center;
+}
+
+aside .flipping-card .front .item {
+    padding: 20px;
+    font-family: cursive;
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--aueb-maroon);
+    transform: rotate(10deg);
+}
+
+@media (max-width: 768px) {
+    .table-products {
+        font-size: 0.9rem;
+    }
+    .table-products th,
+    .table-products td {
+        padding: 8px;
+    }
+}
+
+@media (max-width: 600px) {
+    .table-products {
+        font-size: 0.88rem;
+    }
+    .table-products th,
+    .table-products td {
+        padding: 7px;
+    }
+}

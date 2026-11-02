@@ -1,0 +1,106 @@
+.drop-zone {
+    width: 100%;
+    min-height: 160px;
+    border: 2px dashed var(--aueb-maroon);
+    border-radius: 12px;
+    background: #faf8f9;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.drop-zone:hover,
+.drop-zone.dragover {
+    background-color: #f3e9ec;
+    border-color: var(--aueb-maroon-dark);
+}
+
+.drop-prompt {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: #666;
+    pointer-events: none;
+}
+
+.drop-prompt .drop-icon {
+    font-size: 2rem;
+}
+
+.drop-prompt p {
+    font-size: 0.95rem;
+    margin: 0;
+}
+
+.file-input-hidden {
+    display: none;
+}
+
+.preview-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+}
+
+.image-preview {
+    display: block;
+    width: 130px;
+    height: 130px;
+    object-fit: contain;
+    border-radius: 8px;
+    background: #ffffff;
+    border: 1px solid var(--aueb-border);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.btn-remove-image {
+    background-color: #800020;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    padding: 7px 16px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.admin-import-export {
+    margin: 24px 0;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.admin-import-export .buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+}
+
+.import-file-label {
+    display: inline-block;
+    padding: 10px 16px;
+    background-color: #800020;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.import-file-label:hover {
+    background-color: #600018;
+}
+
+.admin-import-export p {
+    font-size: 14px;
+    margin-top: 12px;
+}

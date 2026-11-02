@@ -1,0 +1,13 @@
+.product-details {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.product-details img {
+    max-width: 300px;
+    height: auto;
+    border-radius: 6px;
+    border: 1px solid var(--aueb-border);
+}
