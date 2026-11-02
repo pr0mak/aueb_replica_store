@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="el">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AUEB Official Store - Λεπτομέρειες προϊόντος</title>
+    <link rel="stylesheet" href="/styles/style.css">
+    <script src="/js/product.js" defer></script>
+
+    <script src="js/auth-ui.js" defer></script>
+
+    <script src="js/custom_alert.js" defer></script>
+
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div class="header-top">
+                <table class="aueb-profile">
+                    <tr>
+                        <th class="logo">
+                            <a href="index.html" aria-label="Αρχική σελίδα">
+                                <img src="/assets/aueb_logo.jpg" alt="Λογότυπο Οικονομικού Πανεπιστημίου Αθηνών">
+                            </a>
+                        </th>
+                    </tr>
+                </table>
+
+                <div class="header-actions" id="headerActions">
+                    <a href="register.html" class="login-link">Register</a>
+                    <a href="login.html" class="login-link">Login</a>
+                </div>
+            </div>
+
+            <nav aria-label="Κεντρικό μενού">
+                <ul>
+                    <li><a href="index.html">Αρχική</a></li>
+                    <li><a href="store.html">Κατάστημα</a></li>
+                    <li><a href="buy.html">Παραγγελία</a></li>
+                    <li><a href="contact.html">Επικοινωνία</a></li>
+                    <li id="adminLink" class="admin-only hidden">
+                        <a href="admin.html">Admin Panel</a>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+
+        <main>
+            <!-- Το περιεχόμενο συμπληρώνεται από το product.js με βάση το ?id= -->
+            <h1 id="productTitle">Φόρτωση προϊόντος...</h1>
+
+            <article class="product-details">
+                <img id="productImage" src="" alt="">
+
+                <h2>Χαρακτηριστικά προϊόντος</h2>
+                <p id="productDescription"></p>
+
+                <h3>Σημειώσεις</h3>
+                <ul id="productNotes"></ul>
+
+                <p>
+                    Τιμή:
+                    <strong><span id="productPrice"></span> €</strong>
+                </p>
+
+                <form action="buy.html" method="GET" class="form buy">
+                    <label for="num">Ποσότητα:</label>
+                    <input type="number" id="num" min="1" max="10" name="quantity" value="1" required>
+
+                    <input type="hidden" name="productId" id="productId" value="">
+
+                    <div class="buttons">
+                        <button type="submit">Παραγγελία</button>
+                        <button type="reset">Επαναφορά</button>
+                    </div>
+                </form>
+
+                <p>
+                    <a href="store.html">Επιστροφή στον κατάλογο προϊόντων</a>
+                </p>
+            </article>
+
+            <aside>
+                <div class="counters">
+                    <p>Επισκέψεις σελίδας: <span>12</span></p>
+                    <p>Συνολικές επισκέψεις: <span>1050</span></p>
+                </div>
+
+                <div class="flipping-card">
+                    <div class="offer">
+                        <div class="image">
+                            <img src="/assets/CAMPUS_LOOK_BUNDLE.png" alt="Πακέτο φοιτητικών προϊόντων CAMPUS LOOK">
+                        </div>
+
+                        <div class="price">
+                            <span class="old_price">15 €</span> 10 €
+                        </div>
+
+                        <h3>CAMPUS LOOK BUNDLE</h3>
+                        <p>Μοναδική προσφορά για φοιτητές</p>
+
+                        <button type="button" id="bundleBtn">
+                            Αγόρασε τώρα!
+                        </button>
+                    </div>
+
+                    <div class="front">
+                        <div class="item">
+                            <span>Προσφορά ημέρας</span>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </main>
+
+        <footer>
+            <div class="first-column">
+                <h3>&copy; AUEB Official Store 2026</h3>
+                <p>
+                    <a href="https://www.shop.aueb.gr/">
+                    Επίσημη ιστοσελίδα AUEB
+                </a>
+                </p>
+            </div>
+
+            <div class="third-column">
+                <h3>Οικονομικό Πανεπιστήμιο Αθηνών</h3>
+                <p>Πατησίων 76, Αθήνα</p>
+            </div>
+
+            <div class="design">
+                <p>Σχεδίαση: AuebStore.</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- custom alert-->
+    <div id="customAlert" class="modal-overlay hidden">
+        <div class="modal-box">
+            <p id="alertMessage"></p>
+            <button id="alertOkBtn">Εντάξει</button>
+        </div>
+    </div>
+
+</body>
+
+</html>
