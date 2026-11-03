@@ -1,4 +1,7 @@
+gia na trejeis ton server
+npm run dev
 
+kai meta phgaine postman gia testing
 
 AUTHENTICATION
 
