@@ -4,6 +4,7 @@ const cors = require('cors');
 require('dotenv').config();
 
 const productsRoutes = require("./routes/ProductsRoutes");
+const buyRoutes = require("./routes/BuyRoutes");
 
 const app = express();
 
@@ -17,6 +18,7 @@ mongoose.connect(process.env.MONGO_URI)
 //sundesh me routes
 app.use('/api/auth', require('./routes/AuthRoutes'));
 app.use('/api', productsRoutes);
+app.use("/api/buy", require("./routes/BuyRoutes"));
 //app.use('/api/orders', require('./routes/OrderRoutes'));
 
 const PORT = process.env.PORT || 5000;
