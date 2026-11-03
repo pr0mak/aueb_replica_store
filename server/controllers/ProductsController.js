@@ -1,80 +1,51 @@
 const mongoose = require("mongoose");
 const Product = require("../models/Product");
 
-// GET /api/store
+// GET /api/products
 const getAllProducts = async (req, res) => {
     try {
         const products = await Product.find();
 
-        res.status(200).json(products);
+        return res.status(200).json(products);
     } catch (error) {
-        res.status(500).json({
-            success: false ,
+        return res.status(500).json({
+            success: false,
             message: "Error fetching products"
         });
     }
 };
 
-
-// GET /api/store/:category
-const getProductsByCategory = async (req, res) => {
-    try {
-        const { category } = req.params;
-
-        if (category != "clothes" && category != "office_supplies" && category != "accessories"){
-            return res.status(404).json({
-                success: false ,
-                message: "Error category not found"
-            });
-        }
-
-        const products = await Product.find({ category });
-
-        res.status(200).json(products);
-    } catch (error) {
-        res.status(500).json({
-            success: false ,
-            message: "Error fetching category products"
-        });
-    }
-};
-
-
-// GET /api/store/:category/:id
+// GET /api/products/:id
 const getProductById = async (req, res) => {
     try {
-        const { category, id } = req.params;
-
-        const product = await Product.findOne({
-            _id: id,
-            category
-        });
+        const { id } = req.params;
 
         if (!mongoose.isValidObjectId(id)) {
             return res.status(400).json({
-                success: false ,
+                success: false,
                 message: "Invalid product ID"
             });
         }
 
+        const product = await Product.findById(id);
+
         if (!product) {
             return res.status(404).json({
-                success: false ,
+                success: false,
                 message: "Product not found"
             });
         }
 
-        res.status(200).json(product);
+        return res.status(200).json(product);
     } catch (error) {
-        res.status(500).json({
-            success: false ,
+        return res.status(500).json({
+            success: false,
             message: "Error fetching product"
         });
     }
 };
 
-
-// POST /api/admin/products
+// POST /api/products
 const createProduct = async (req, res) => {
     try {
         const {
@@ -97,31 +68,30 @@ const createProduct = async (req, res) => {
             notes
         });
 
-        res.status(201).json(product);
+        return res.status(201).json(product);
     } catch (error) {
         if (error.name === "ValidationError") {
             return res.status(400).json({
-                success: false ,
+                success: false,
                 message: error.message
             });
         }
 
-        res.status(500).json({
-            success: false ,
+        return res.status(500).json({
+            success: false,
             message: "Error creating product"
         });
     }
 };
 
-
-// PUT /api/admin/products/:id
+// PUT /api/products/:id
 const updateProduct = async (req, res) => {
     try {
         const { id } = req.params;
 
         if (!mongoose.isValidObjectId(id)) {
             return res.status(400).json({
-                success: false ,
+                success: false,
                 message: "Invalid product ID"
             });
         }
@@ -144,47 +114,53 @@ const updateProduct = async (req, res) => {
             }
         }
 
+        if (Object.keys(updates).length === 0) {
+            return res.status(400).json({
+                success: false,
+                message: "No valid fields provided"
+            });
+        }
+
         const product = await Product.findByIdAndUpdate(
             id,
             { $set: updates },
             {
-                new: true,
+                returnDocument: "after",
                 runValidators: true
             }
         );
 
         if (!product) {
             return res.status(404).json({
-                success: false ,
+                success: false,
                 message: "Product not found"
             });
         }
 
-        res.status(200).json(product);
+        return res.status(200).json(product);
     } catch (error) {
         if (error.name === "ValidationError") {
             return res.status(400).json({
-                success: false ,
+                success: false,
                 message: error.message
             });
         }
 
-        res.status(500).json({
-            success: false ,
+        return res.status(500).json({
+            success: false,
             message: "Error updating product"
         });
     }
 };
 
-
-// DELETE /api/admin/products/:id
+// DELETE /api/products/:id
 const deleteProduct = async (req, res) => {
     try {
         const { id } = req.params;
 
         if (!mongoose.isValidObjectId(id)) {
             return res.status(400).json({
-                success: false ,
+                success: false,
                 message: "Invalid product ID"
             });
         }
@@ -193,26 +169,25 @@ const deleteProduct = async (req, res) => {
 
         if (!product) {
             return res.status(404).json({
-                success: false ,
+                success: false,
                 message: "Product not found"
             });
         }
 
-        res.status(200).json({
+        return res.status(200).json({
+            success: true,
             message: "Product deleted successfully"
         });
     } catch (error) {
-        res.status(500).json({
-            success: false ,
+        return res.status(500).json({
+            success: false,
             message: "Error deleting product"
         });
     }
 };
 
-
 module.exports = {
     getAllProducts,
-    getProductsByCategory,
     getProductById,
     createProduct,
     updateProduct,

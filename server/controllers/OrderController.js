@@ -3,20 +3,14 @@ const mongoose = require("mongoose");
 const Product = require("../models/Product");
 const Order = require("../models/Order");
 
-// POST /api/buy/checkout
-const checkout = async (req, res) => {
-    const { items } = req.body || {};
+const authenticatedUserId = (req) =>
+    req.user?._id || req.user?.id;
 
-    //check cart
-    if (!Array.isArray(items) || items.length === 0) {
-        return res.status(400).json({
-            success: false,
-            message: "Cart is empty or invalid"
-        });
-    }
 
-    //check user
-    const userId = req.user?.id || req.user?._id;
+// POST /api/orders
+const createOrder = async (req, res) => {
+    const userId = authenticatedUserId(req);
+
     if (!userId || !mongoose.isValidObjectId(userId)) {
         return res.status(401).json({
             success: false,
@@ -24,11 +18,21 @@ const checkout = async (req, res) => {
         });
     }
 
-    //check products/quant
+    const { items } = req.body || {};
+
+    if (!Array.isArray(items) || items.length === 0) {
+        return res.status(400).json({
+            success: false,
+            message: "Cart is empty or invalid"
+        });
+    }
+
     const quantities = new Map();
+
     for (const item of items) {
         if (
             !item ||
+            typeof item.productId !== "string" ||
             !mongoose.isValidObjectId(item.productId) ||
             !Number.isSafeInteger(item.quantity) ||
             item.quantity <= 0
@@ -39,10 +43,10 @@ const checkout = async (req, res) => {
             });
         }
 
-        const productId = item.productId.toString();
+        const id = item.productId.toLowerCase();
 
         const quantity =
-            (quantities.get(productId) || 0) + item.quantity;
+            (quantities.get(id) || 0) + item.quantity;
 
         if (!Number.isSafeInteger(quantity)) {
             return res.status(400).json({
@@ -51,18 +55,18 @@ const checkout = async (req, res) => {
             });
         }
 
-        quantities.set(productId, quantity);
+        quantities.set(id, quantity);
     }
 
     try {
         const order = await mongoose.connection.transaction(
             async (session) => {
-                const orderProducts = [];
-                let totalAmount = 0;
+                const products = [];
+                let totalCents = 0;
 
                 for (const [productId, quantity] of quantities) {
 
-                    //check stock and refresh quantinty
+                    // Check stock and decrease availability
                     const product = await Product.findOneAndUpdate(
                         {
                             _id: productId,
@@ -72,7 +76,7 @@ const checkout = async (req, res) => {
                             $inc: { availability: -quantity }
                         },
                         {
-                            new: false,
+                            returnDocument: "before",
                             session
                         }
                     );
@@ -81,42 +85,58 @@ const checkout = async (req, res) => {
                         const error = new Error(
                             "Product not found or insufficient stock"
                         );
+
                         error.status = 409;
                         throw error;
                     }
 
-                    //add product in order
-                    orderProducts.push({
+                    // Calculate price using integer cents
+                    const priceCents = Math.round(
+                        product.price * 100
+                    );
+
+                    if (
+                        !Number.isSafeInteger(priceCents) ||
+                        priceCents < 0 ||
+                        !Number.isSafeInteger(
+                            totalCents + priceCents * quantity
+                        )
+                    ) {
+                        throw new Error(
+                            "Invalid product price or order total"
+                        );
+                    }
+
+                    // Save product snapshot
+                    products.push({
                         product: product._id,
-                        quantity: quantity,
-                        price: product.price
+                        name: product.name,
+                        quantity,
+                        price: priceCents / 100
                     });
 
-                    totalAmount += product.price * quantity;
+                    totalCents += priceCents * quantity;
                 }
 
-                totalAmount =
-                    Math.round((totalAmount + Number.EPSILON) * 100) / 100;
-
-                //create new order
-                const [newOrder] = await Order.create(
+                // Create order
+                const [created] = await Order.create(
                     [{
                         user: userId,
-                        products: orderProducts,
-                        totalAmount: totalAmount,
+                        products,
+                        totalAmount: totalCents / 100,
                         status: "Σε επεξεργασία"
                     }],
                     { session }
                 );
 
-                return newOrder;
+                return created;
             }
         );
 
         return res.status(201).json({
             success: true,
             message: "Order created successfully",
-            order: order
+            order
         });
 
     } catch (error) {
@@ -146,6 +166,39 @@ const checkout = async (req, res) => {
     }
 };
 
+
+// GET /api/orders
+const getMyOrders = async (req, res) => {
+    const userId = authenticatedUserId(req);
+
+    if (!userId || !mongoose.isValidObjectId(userId)) {
+        return res.status(401).json({
+            success: false,
+            message: "Unauthorized user"
+        });
+    }
+
+    try {
+        const orders = await Order.find({
+            user: userId
+        })
+        .sort({ createdAt: -1 })
+        .lean();
+
+        return res.status(200).json(orders);
+
+    } catch (error) {
+        console.error("Get orders error:", error);
+
+        return res.status(500).json({
+            success: false,
+            message: "Error fetching orders"
+        });
+    }
+};
+
+
 module.exports = {
-    checkout
+    createOrder,
+    getMyOrders
 };

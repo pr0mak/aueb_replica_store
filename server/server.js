@@ -4,7 +4,8 @@ const cors = require('cors');
 require('dotenv').config();
 
 const productsRoutes = require("./routes/ProductsRoutes");
-const buyRoutes = require("./routes/BuyRoutes");
+const authRoutes = require("./routes/authRoutes");
+const orderRoutes = require("./routes/OrderRoutes");
 
 const app = express();
 
@@ -16,10 +17,15 @@ mongoose.connect(process.env.MONGO_URI)
   .catch((err) => console.error('Σφάλμα στη MongoDB:', err));
 
 //sundesh me routes
-app.use('/api/auth', require('./routes/AuthRoutes'));
-app.use('/api', productsRoutes);
-app.use("/api/buy", require("./routes/BuyRoutes"));
-//app.use('/api/orders', require('./routes/OrderRoutes'));
+app.use("/api/auth", authRoutes);
+app.use("/api/products", productsRoutes);
+app.use("/api/orders", orderRoutes);
+app.use("/api", (req, res) => {
+    return res.status(404).json({
+        success: false,
+        message: "API endpoint not found"
+    });
+});
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
