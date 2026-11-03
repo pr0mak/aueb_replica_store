@@ -97,6 +97,8 @@ const createProduct = async (req, res) => {
             notes
         });
 
+        res.status(201).json(product);
+    } catch (error) {
         if (error.name === "ValidationError") {
             return res.status(400).json({
                 success: false ,
@@ -104,8 +106,6 @@ const createProduct = async (req, res) => {
             });
         }
 
-        res.status(201).json(product);
-    } catch (error) {
         res.status(500).json({
             success: false ,
             message: "Error creating product"
@@ -153,13 +153,6 @@ const updateProduct = async (req, res) => {
             }
         );
 
-        if (error.name === "ValidationError") {
-            return res.status(400).json({
-                success: false ,
-                message: error.message
-            });
-        }
-
         if (!product) {
             return res.status(404).json({
                 success: false ,
@@ -169,6 +162,13 @@ const updateProduct = async (req, res) => {
 
         res.status(200).json(product);
     } catch (error) {
+        if (error.name === "ValidationError") {
+            return res.status(400).json({
+                success: false ,
+                message: error.message
+            });
+        }
+
         res.status(500).json({
             success: false ,
             message: "Error updating product"

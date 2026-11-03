@@ -16,10 +16,12 @@ mongoose.connect(process.env.MONGO_URI)
 
 //sundesh me routes
 app.use('/api/auth', require('./routes/AuthRoutes'));
-//app.use('/api/products', require('./routes/ProductsRoutes'));
+app.use('/api', productsRoutes);
 //app.use('/api/orders', require('./routes/OrderRoutes'));
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`O Server τρέχει στη θύρα ${PORT}`);
 });
+
+
