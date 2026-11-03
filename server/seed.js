@@ -87,6 +87,7 @@ const seedDatabase = async () => {
                 firstname: "ADMIN",
                 lastname: "AUEB",
                 email: "admin@aueb.gr",
+                phone: "6900000000",
                 password: adminPasswordHash,
                 role: "admin"
             },
@@ -94,6 +95,7 @@ const seedDatabase = async () => {
                 firstname: "ΓΕΩΡΓΙΟΣ",
                 lastname: "ΠΑΠΑΔΟΠΟΥΛΟΣ",
                 email: "user@aueb.gr",
+                phone: "6900000001",
                 password: userPasswordHash,
                 role: "user"
             }
@@ -102,7 +104,7 @@ const seedDatabase = async () => {
 
         //eisagwgh 10 products
         await Product.insertMany(initialProducts);
-        console.log('Δημιουργήθηκαν 10 αρχικά προϊόντα.');
+        console.log('Δημιουργήθηκαν τα αρχικά προϊόντα.');
 
         console.log('Η αρχικοποίηση (Seed) ολοκληρώθηκε με επιτυχία!');
         process.exit(0);

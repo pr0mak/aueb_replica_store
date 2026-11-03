@@ -1,58 +1,49 @@
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
-//epalitheush JWT Token (401)
-const authenticate = async (req, res, next) => {
+//verify token and fetch the current role from the database.
+async function verifyToken(req, res, next) {
+    const header = req.get("authorization") || "";
+    const match = /^Bearer\s+(\S+)$/i.exec(header);
+    if (!match){
+        return res.status(401).json({ success: false, message: "Απαιτείται Bearer token." });
+    }
     try {
-        const authHeader = req.headers.authorization;
 
-        if (!authHeader?.startsWith("Bearer ")) {
-            return res.status(401).json({
-                success: false,
-                message: "Authentication required"
-            });
+        const decoded = jwt.verify(match[1], process.env.JWT_SECRET, { algorithms: ["HS256"] });
+        const user = await User.findById(decoded.id).select("_id role email").lean();
+        
+        if (!user){
+            return res.status(401).json({ success: false, message: "Ο λογαριασμός δεν υπάρχει." });
         }
 
-        const token = authHeader.split(" ")[1];
-
-        const decoded = jwt.verify(
-            token,
-            process.env.JWT_SECRET
-        );
-
-        const user = await User.findById(decoded.id);
-
-        if (!user) {
-            return res.status(401).json({
-                success: false,
-                message: "User not found"
-            });
-        }
-
-        req.user = user;
+        req.user = { id: String(user._id), role: user.role, email: user.email };
         next();
 
-    } catch (error) {
-        return res.status(401).json({
-            success: false,
-            message: "Invalid or expired token"
-        });
     }
-};
-
-//epalitheush Admin role(403)
-const requireAdmin = (req, res, next) => {
-    if (req.user.role !== "admin") {
-        return res.status(403).json({
-            success: false,
-            message: "Admin access required"
-        });
+    catch (error) {
+        if (error.name === "JsonWebTokenError" || error.name === "TokenExpiredError" || error.name === "NotBeforeError") {
+            return res.status(401).json({ success: false, message: "Μη έγκυρο ή ληγμένο token." });
+        }
+        next(error);
     }
+}
 
+function verifyAdmin(req, res, next) {
+    if (req.user?.role !== "admin"){
+        return res.status(403).json({ success: false, message: "Μόνο ο διαχειριστής έχει πρόσβαση." });
+    }
     next();
-};
+}
 
+function verifyCustomer(req, res, next) {
+    if (req.user?.role !== "user"){
+        return res.status(403).json({ success: false, message: "Μόνο χρήστης με ρόλο User μπορεί να υποβάλει παραγγελία." });
+    }
+    next();
+}
 module.exports = {
-    authenticate,
-    requireAdmin
+    verifyToken,
+    verifyAdmin,
+    verifyCustomer
 };
