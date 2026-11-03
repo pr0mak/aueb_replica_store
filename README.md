@@ -30,4 +30,5 @@ CODES --->
     401 -- Unauthorized	 -- The request was a legal request, but the server is refusing to respond to it. For use when authentication is possible but has failed or not yet been provided
     403 -- Forbidden -- The request was a legal request, but the server is refusing to respond to it
     404 -- Not found -- The requested page could not be found but may be available again in the future
+    409 -- Conflict
 
