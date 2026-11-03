@@ -8,7 +8,6 @@
 
 API ---> GET(get), POST(create), PUT(update), DELETE(delete)
 
-    /api/index				GET
     /api/store				GET
     /api/store/clothes			GET
     /api/store/clothes/{id}			GET , POST , PUT
@@ -18,7 +17,6 @@ API ---> GET(get), POST(create), PUT(update), DELETE(delete)
     /api/store/accessories/{id}		GET , POST , PUT
     /api/buy				GET , POST
     /api/orders				GET , POST
-    /api/contact				GET , POST 
     /api/auth/register			GET , POST
     /api/auth/login				GET , POST
     /api/admin/products			GET , POST  
