@@ -1,73 +1,63 @@
-const User = require('../models/User');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+const User = require("../models/User");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const {
+    validateRegistration,
+    emailPattern } = require("../utils/validators");
 
-exports.register = async (req, res) => {
+async function register(req, res, next) {
     try {
-        const { firstname, lastname, email, password } = req.body;
-
-        if (!firstname || !lastname || !email || !password) {
-            return res.status(400).json({ success: false, message: 'Όλα τα πεδία είναι υποχρεωτικά.' });
+        const error = validateRegistration(req.body);
+        if (error){
+            return res.status(400).json({ success: false, message: error });
         }
+        const { firstname, lastname, phone, password } = req.body;
+        const email = req.body.email.trim().toLowerCase();
 
-        const existingUser = await User.findOne({ email });
-        if (existingUser) {
-            return res.status(400).json({ success: false, message: 'To email χρησιμοποιείται ήδη.' });
+        if (await User.exists({ email })) {
+            return res.status(400).json({ success: false, message: "Το email χρησιμοποιείται ήδη." });
         }
-
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = new User({
-            firstname,
-            lastname,
-            email,
-            password: hashedPassword,
-            role: 'user'
+        const passwordHash = await bcrypt.hash(password, 10);
+        await User.create({
+            firstname: firstname.trim(), lastname: lastname.trim(), phone: phone.trim(),
+            email, password: passwordHash, role: "user"
         });
 
-        await newUser.save();
-        res.status(201).json({ success: true, message: 'H εγγραφή ολοκληρώθηκε με επιτυχία!' });
-    } catch (error) {
-        res.status(500).json({ success: false, message: 'Σφάλμα διακομιστή κατά την εγγραφή.', error: error.message });
-    }
-};
+        return res.status(201).json({ success: true, message: "Η εγγραφή ολοκληρώθηκε με επιτυχία." });
 
-exports.login = async (req, res) => {
+    } catch (error) {
+        if (error.code === 11000) return res.status(400).json({ success: false, message: "Το email χρησιμοποιείται ήδη." });
+        if (error.name === "ValidationError") return res.status(400).json({ success: false, message: error.message });
+        next(error);
+    }
+}
+
+async function login(req, res, next) {
     try {
-        const { email, password } = req.body;
+        const { email, password } = req.body || {};
+        if (typeof email !== "string" || !emailPattern.test(email.trim()) || typeof password !== "string" || !password) {
+            return res.status(400).json({ success: false, message: "Συμπλήρωσε σωστά email και κωδικό." });
+        }
+        const user = await User.findOne({ email: email.trim().toLowerCase() }).select("+password");
+        const isValid = user ? await bcrypt.compare(password, user.password) : false;
 
-        if (!email || !password) {
-            return res.status(400).json({ success: false, message: 'Συμπληρώστε email και password.' });
+        if (!isValid){
+            return res.status(401).json({ success: false, message: "Λανθασμένο email ή κωδικός πρόσβασης." });
         }
 
-        const user = await User.findOne({ email });
-        if (!user) {
-            return res.status(401).json({ success: false, message: 'Λανθασμένο email ή κωδικός πρόσβασης.' });
-        }
-
-        const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) {
-            return res.status(401).json({ success: false, message: 'Λανθασμένο email ή κωδικός πρόσβασης.' });
-        }
-
-        const token = jwt.sign(
-            { id: user._id, role: user.role, email: user.email },
-            process.env.JWT_SECRET,
-            { expiresIn: '24h' }
-        );
-
-        res.status(200).json({
-            success: true,
-            message: 'Επιτυχής σύνδεση!',
-            token,
-            user: {
-                id: user._id,
-                firstname: user.firstname,
-                lastname: user.lastname,
-                email: user.email,
-                role: user.role
-            }
+        const token = jwt.sign({ id: String(user._id), role: user.role }, process.env.JWT_SECRET, {
+            algorithm: "HS256", expiresIn: "24h"
         });
-    } catch (error) {
-        res.status(500).json({ success: false, message: 'Σφάλμα διακομιστή κατά τη σύνδεση.', error: error.message });
+
+        return res.status(200).json({
+            success: true, message: "Επιτυχής σύνδεση!", token,
+            user: { id: user._id, firstname: user.firstname, lastname: user.lastname,
+                phone: user.phone, email: user.email, role: user.role }
+        });
+
     }
-};
+    catch (error) {
+        next(error);
+    }
+}
+module.exports = { register, login };

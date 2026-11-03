@@ -1,0 +1,169 @@
+gia na trejeis ton server
+npm run dev
+
+kai meta phgaine postman gia testing
+
+AUTHENTICATION
+
+POST http://localhost:5000/api/auth/register
+{
+  "firstname": "ΓΙΩΡΓΟΣ",
+  "lastname": "ΠΑΠΑΔΟΠΟΥΛΟΣ",
+  "phone": "6912345678",
+  "email": "giorgos.test@example.com",
+  "password": "Test1234!",
+  "confirmPassword": "Test1234!"
+}
+
+POST http://localhost:5000/api/auth/login
+gia admin
+{
+  "email": "admin@aueb.gr",
+  "password": "Admin123!"
+}
+gia user
+{
+  "email": "user@aueb.gr",
+  "password": "User123!"
+}
+
+
+PRODUCTS
+
+GET http://localhost:5000/api/products
+
+GET http://localhost:5000/api/products/:id
+
+POST http://localhost:5000/api/products
+
+Πάτησε την καρτέλα Authorization.
+Στο πεδίο Auth Type, επίλεξε Bearer Token γιατι απαιτειται
+και βάλε αυτο που θα βρεις οταν κανεις login ως admin
+{
+    "success": true,
+    "message": "Επιτυχής σύνδεση!",
+    "token": "AUTO EDWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
+    "user": {
+        "id": "6aea37a58972fb8b7a2a626c",
+        "firstname": "ADMIN",
+        "lastname": "AUEB",
+        "phone": "6900000000",
+        "email": "admin@aueb.gr",
+        "role": "admin"
+    }
+}
+{
+  "name": "Μπλουζάκι AUEB Test",
+  "category": "clothes",
+  "price": 19.99,
+  "availability": 15,
+  "image": "",
+  "description": "Δοκιμαστικό προϊόν από το Postman",
+  "notes": "Μόνο για δοκιμές"
+}
+
+PUT http://localhost:5000/api/products/:id
+
+Πάτησε την καρτέλα Authorization.
+Στο πεδίο Auth Type, επίλεξε Bearer Token γιατι απαιτειται
+και βάλε αυτο που θα βρεις οταν κανεις login ως admin
+{
+    "success": true,
+    "message": "Επιτυχής σύνδεση!",
+    "token": "AUTO EDWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
+    "user": {
+        "id": "6aea37a58972fb8b7a2a626c",
+        "firstname": "ADMIN",
+        "lastname": "AUEB",
+        "phone": "6900000000",
+        "email": "admin@aueb.gr",
+        "role": "admin"
+    }
+}
+vale auto sto body
+{
+  "name": "Μπλουζάκι AUEB Updated",
+  "price": 24.99,
+  "availability": 20
+}
+
+
+DELETE http://localhost:5000/api/products/:id
+
+Πάτησε την καρτέλα Authorization.
+Στο πεδίο Auth Type, επίλεξε Bearer Token γιατι απαιτειται
+και βάλε αυτο που θα βρεις οταν κανεις login ως admin
+{
+    "success": true,
+    "message": "Επιτυχής σύνδεση!",
+    "token": "AUTO EDWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
+    "user": {
+        "id": "6aea37a58972fb8b7a2a626c",
+        "firstname": "ADMIN",
+        "lastname": "AUEB",
+        "phone": "6900000000",
+        "email": "admin@aueb.gr",
+        "role": "admin"
+    }
+}
+
+
+PRODUCT FILTERS
+
+GET http://localhost:5000/api/products?category=clothes
+
+GET http://localhost:5000/api/products?category=accessories
+
+GET http://localhost:5000/api/products?category=office_supplies
+
+
+ORDERS
+
+GET http://localhost:5000/api/orders
+
+Πάτησε την καρτέλα Authorization.
+Στο πεδίο Auth Type, επίλεξε Bearer Token γιατι απαιτειται
+και βάλε αυτο που θα βρεις οταν κανεις login ως user
+{
+    "success": true,
+    "message": "Επιτυχής σύνδεση!",
+    "token": "AUTO EDWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
+    "user": {
+        "id": "6aea37a58972fb8b7a2a626d",
+        "firstname": "ΓΕΩΡΓΙΟΣ",
+        "lastname": "ΠΑΠΑΔΟΠΟΥΛΟΣ",
+        "phone": "6900000001",
+        "email": "user@aueb.gr",
+        "role": "user"
+    }
+}
+
+THELEI TROPOPOIHSH TO MONGODB MENEI MONO TO APO KATW OLA TA ALLA DOULEVEOUN 100%
+
+POST http://localhost:5000/api/orders
+
+Πάτησε την καρτέλα Authorization.
+Στο πεδίο Auth Type, επίλεξε Bearer Token γιατι απαιτειται
+και βάλε αυτο που θα βρεις οταν κανεις login ως user
+{
+    "success": true,
+    "message": "Επιτυχής σύνδεση!",
+    "token": "AUTO EDWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
+    "user": {
+        "id": "6aea37a58972fb8b7a2a626d",
+        "firstname": "ΓΕΩΡΓΙΟΣ",
+        "lastname": "ΠΑΠΑΔΟΠΟΥΛΟΣ",
+        "phone": "6900000001",
+        "email": "user@aueb.gr",
+        "role": "user"
+    }
+}
+vale auto sto body
+{
+  "items": [
+    {
+      "productId": "ΒΑΛΕ_ΕΔΩ_ΤΟ_ΠΡΑΓΜΑΤΙΚΟ_ID",
+      "quantity": 2
+    }
+  ]
+}

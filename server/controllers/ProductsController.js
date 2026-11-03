@@ -1,215 +1,109 @@
 const mongoose = require("mongoose");
 const Product = require("../models/Product");
+const { validateProductInput, CATEGORIES } = require("../utils/validators");
 
-// GET /api/store
-const getAllProducts = async (req, res) => {
+async function getAllProducts(req, res, next) {
     try {
-        const products = await Product.find();
+        const { category } = req.query;
+        if (category !== undefined && !CATEGORIES.includes(category)) {
+            return res.status(400).json({ success: false, message: "Μη έγκυρη κατηγορία." });
+        }
+        const products = await Product.find(category ? { category } : {}).sort({ createdAt: 1, _id: 1 }).lean();
+        return res.json(products);
+    } catch (error) { next(error); }
+}
 
-        res.status(200).json(products);
-    } catch (error) {
-        res.status(500).json({
-            success: false ,
-            message: "Error fetching products"
-        });
+async function getProductsByCategory(req, res, next) {
+    if (!CATEGORIES.includes(req.params.category)) {
+        return res.status(404).json({ success: false, message: "Η κατηγορία δεν βρέθηκε." });
     }
-};
-
-
-// GET /api/store/:category
-const getProductsByCategory = async (req, res) => {
     try {
-        const { category } = req.params;
+        const products = await Product.find({ category: req.params.category }).sort({ createdAt: 1, _id: 1 }).lean();
+        return res.json(products);
+    } catch (error) { next(error); }
+}
 
-        if (category != "clothes" && category != "office_supplies" && category != "accessories"){
-            return res.status(404).json({
-                success: false ,
-                message: "Error category not found"
-            });
-        }
-
-        const products = await Product.find({ category });
-
-        res.status(200).json(products);
-    } catch (error) {
-        res.status(500).json({
-            success: false ,
-            message: "Error fetching category products"
-        });
-    }
-};
-
-
-// GET /api/store/:category/:id
-const getProductById = async (req, res) => {
+async function getProductById(req, res, next) {
     try {
-        const { category, id } = req.params;
-
-        const product = await Product.findOne({
-            _id: id,
-            category
-        });
-
-        if (!mongoose.isValidObjectId(id)) {
-            return res.status(400).json({
-                success: false ,
-                message: "Invalid product ID"
-            });
+        const { id, category } = req.params;
+        if (!mongoose.isValidObjectId(id)){
+            return res.status(400).json({ success: false, message: "Μη έγκυρο product ID." });
         }
 
-        if (!product) {
-            return res.status(404).json({
-                success: false ,
-                message: "Product not found"
-            });
+        if (category && !CATEGORIES.includes(category)){
+            return res.status(404).json({ success: false, message: "Η κατηγορία δεν βρέθηκε." });
         }
 
-        res.status(200).json(product);
+        const product = await Product.findOne({ _id: id, ...(category ? { category } : {}) }).lean();
+        
+        if (!product){
+            return res.status(404).json({ success: false, message: "Το προϊόν δεν βρέθηκε." });
+        }
+
+        return res.json(product);
     } catch (error) {
-        res.status(500).json({
-            success: false ,
-            message: "Error fetching product"
-        });
+        next(error);
     }
-};
+}
 
-
-// POST /api/admin/products
-const createProduct = async (req, res) => {
+async function createProduct(req, res, next) {
     try {
-        const {
-            name,
-            category,
-            price,
-            availability,
-            image,
-            description,
-            notes
-        } = req.body;
-
-        const product = await Product.create({
-            name,
-            category,
-            price,
-            availability,
-            image,
-            description,
-            notes
-        });
-
-        res.status(201).json(product);
-    } catch (error) {
-        if (error.name === "ValidationError") {
-            return res.status(400).json({
-                success: false ,
-                message: error.message
-            });
+        const error = validateProductInput(req.body);
+        if (error){
+             return res.status(400).json({ success: false, message: error });
         }
+        const product = await Product.create({ ...req.body, name: req.body.name.trim() });
+        return res.status(201).json(product);
 
-        res.status(500).json({
-            success: false ,
-            message: "Error creating product"
-        });
     }
-};
+    catch (error) {
+        next(error);
+    }
+}
 
-
-// PUT /api/admin/products/:id
-const updateProduct = async (req, res) => {
+async function updateProduct(req, res, next) {
     try {
-        const { id } = req.params;
-
-        if (!mongoose.isValidObjectId(id)) {
-            return res.status(400).json({
-                success: false ,
-                message: "Invalid product ID"
-            });
+        if (!mongoose.isValidObjectId(req.params.id)){
+            return res.status(400).json({ success: false, message: "Μη έγκυρο product ID." });
         }
+        const error = validateProductInput(req.body, true);
 
-        const allowedFields = [
-            "name",
-            "category",
-            "price",
-            "availability",
-            "image",
-            "description",
-            "notes"
-        ];
-
-        const updates = {};
-
-        for (const field of allowedFields) {
-            if (Object.hasOwn(req.body, field)) {
-                updates[field] = req.body[field];
-            }
+        if (error){
+            return res.status(400).json({ success: false, message: error });
         }
+        const updates = { ...req.body };
 
-        const product = await Product.findByIdAndUpdate(
-            id,
-            { $set: updates },
-            {
-                new: true,
-                runValidators: true
-            }
-        );
-
-        if (!product) {
-            return res.status(404).json({
-                success: false ,
-                message: "Product not found"
-            });
+        if ("name" in updates){
+             updates.name = updates.name.trim();
         }
-
-        res.status(200).json(product);
-    } catch (error) {
-        if (error.name === "ValidationError") {
-            return res.status(400).json({
-                success: false ,
-                message: error.message
-            });
-        }
-
-        res.status(500).json({
-            success: false ,
-            message: "Error updating product"
+        const product = await Product.findByIdAndUpdate(req.params.id, { $set: updates }, {
+            new: true, runValidators: true
         });
+
+        if (!product){
+            return res.status(404).json({ success: false, message: "Το προϊόν δεν βρέθηκε." });
+        }
+        return res.json(product);
+    } catch (error) {
+        next(error);
     }
-};
+}
 
-
-// DELETE /api/admin/products/:id
-const deleteProduct = async (req, res) => {
+async function deleteProduct(req, res, next) {
     try {
-        const { id } = req.params;
-
-        if (!mongoose.isValidObjectId(id)) {
-            return res.status(400).json({
-                success: false ,
-                message: "Invalid product ID"
-            });
+        if (!mongoose.isValidObjectId(req.params.id)){
+            return res.status(400).json({ success: false, message: "Μη έγκυρο product ID." });
         }
+        const product = await Product.findByIdAndDelete(req.params.id);
 
-        const product = await Product.findByIdAndDelete(id);
-
-        if (!product) {
-            return res.status(404).json({
-                success: false ,
-                message: "Product not found"
-            });
+        if (!product){
+            return res.status(404).json({ success: false, message: "Το προϊόν δεν βρέθηκε." });
         }
-
-        res.status(200).json({
-            message: "Product deleted successfully"
-        });
+        return res.json({ success: true, message: "Το προϊόν διαγράφηκε." });
     } catch (error) {
-        res.status(500).json({
-            success: false ,
-            message: "Error deleting product"
-        });
+        next(error);
     }
-};
-
-
+}
 module.exports = {
     getAllProducts,
     getProductsByCategory,
