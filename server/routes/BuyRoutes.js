@@ -1,13 +1,10 @@
 const express = require("express");
 const router = express.Router();
 
-const { 
-    checkout 
-} = require("../controllers/BuyController");
+const { checkout } = require("../controllers/BuyController");
+const { verifyToken } = require("../middleware/Auth");
 
-const auth = require("../middleware/Auth");
-
-// Checkout endpoint with auth
-router.post("/checkout", auth, checkout);
+// POST /api/buy/checkout
+router.post("/checkout", verifyToken, checkout);
 
 module.exports = router;
