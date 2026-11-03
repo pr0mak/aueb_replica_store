@@ -6,7 +6,7 @@
     
     npm run seed
 
-API --->
+API ---> GET(get), POST(create), PUT(update), DELETE(delete)
 
     /api/index				GET
     /api/store				GET
