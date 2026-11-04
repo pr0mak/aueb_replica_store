@@ -1,4 +1,3 @@
-//server-side validation
 const greekNamePattern = /^[Α-Ω]+(?:[ -][Α-Ω]+)*$/;
 const passwordLetter = /[a-zA-Zα-ωΑ-Ω]/;
 const passwordNumber = /\d/;
