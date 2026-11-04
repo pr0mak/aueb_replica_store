@@ -6,22 +6,6 @@
     
     npm run seed
 
-API ---> GET(get), POST(create), PUT(update), DELETE(delete)
-
-    /api/store				GET
-    /api/store/clothes			GET
-    /api/store/clothes/{id}			GET , POST , PUT
-    /api/store/office_supplies		GET
-    /api/store/office_supplies/{id}		GET , POST , PUT
-    /api/store/accessories			GET
-    /api/store/accessories/{id}		GET , POST , PUT
-    /api/buy				GET , POST
-    /api/orders				GET , POST
-    /api/auth/register			GET , POST
-    /api/auth/login				GET , POST
-    /api/admin/products			GET , POST  
-    /api/admin/products/{id}		GET , PUT , DELETE
-
 CODES --->
 
     200 -- OK -- The request is OK (this is the standard response for successful HTTP requests)
