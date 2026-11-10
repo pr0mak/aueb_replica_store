@@ -93,7 +93,7 @@ async function checkout(req, res, next) {
             user: req.user.id,
             products: orderProducts,
             totalAmount: totalCents / 100,
-            status: "Καταχωρημένη"
+            status: "Σε επεξεργασία"
         });
 
         order = saved;
