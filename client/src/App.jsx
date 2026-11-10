@@ -54,6 +54,8 @@ import Navbar from "./components/Navbar";
 
 import Home from "./pages/home/HomePage";
 import Contact from "./pages/contact/ContactPage";
+import StorePage from "./pages/store/StorePage";
+import ProductPage from "./pages/product/ProductPage";
 
 function App() {
     return (
@@ -63,7 +65,9 @@ function App() {
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/contact" element={<Contact />} />
-
+                <Route path="/store" element={<StorePage />} />
+                <Route path="/store/:category" element={<StorePage />} />
+                <Route path="/products/:id" element={<ProductPage />} />
                 <Route
                     path="*"
                     element={<h2>404 - Page not found</h2>}
