@@ -1,4 +1,7 @@
-gia na trejeis ton server
+treje prwta to neo seed 
+npm run seed
+
+gia na trejeis ton server (h node server.js)
 npm run dev
 
 kai meta phgaine postman gia testing
