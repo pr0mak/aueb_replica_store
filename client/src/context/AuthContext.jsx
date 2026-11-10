@@ -1,4 +1,4 @@
-import React, {
+import {
     createContext,
     useContext,
     useMemo,
@@ -9,7 +9,7 @@ import { authApi } from "../api";
 
 const AuthContext = createContext(null);
 
-const STORAGE_KEY = "aueb_session_v2";
+const STORAGE_KEY = "aueb_session";
 
 //diavazei sundesh apo to localstorage
 function getStoredSession() {

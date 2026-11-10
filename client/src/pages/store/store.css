@@ -247,3 +247,6 @@ aside .flipping-card .front .item {
         padding: 7px;
     }
 }
+.store-filters { display: flex; flex-wrap: wrap; align-items: end; gap: 15px; padding: 20px; margin-bottom: 22px; }
+.store-filters label { flex: 1 1 205px; }
+.store-filters input, .store-filters select { width: 100%; }

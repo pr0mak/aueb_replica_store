@@ -1,3 +1,18 @@
-.contact-container {
-    padding: 20px;
-}
+.contact-page { display: grid; grid-template-columns: minmax(0, 1fr) 290px; gap: 25px; align-items: start; }
+.contact-page > h1 { grid-column: 1 / -1; }
+.contact-page article { background: white; border: 1px solid #ebe4e5; border-radius: 12px; padding: 25px; min-width: 0; }
+.contact-page article h2 { color: var(--aueb-maroon); }
+.contact-page form.contact { display: grid; gap: 6px; }
+.contact-page form.contact input, .contact-page form.contact textarea { margin-top: 0; margin-bottom: 9px; }
+.contact-page form.contact .error { color: #a52a39; font-size: 12px; margin: 0 0 8px; }
+.contact-page .buttons { display: flex; flex-wrap: wrap; gap: 10px; }
+.contact-page .buttons button, .contact-page .offer button { background: var(--aueb-maroon); color: #fff; border: 0; border-radius: 7px; padding: 11px 17px; font-weight: 700; }
+.contact-page aside { min-width: 0; }
+.contact-page .flipping-card { max-width: 290px; }
+.contact-page .offer { padding: 18px; }
+.contact-page .offer .image img { width: 100%; max-height: 210px; object-fit: contain; }
+.contact-page .offer .price { color: var(--aueb-maroon); font-size: 25px; font-weight: 800; }
+.contact-page .old_price { color: #8d858a; font-size: 15px; text-decoration: line-through; }
+.contact-page .offer h3 { color: var(--aueb-maroon); }
+.contact-page .front { display: none; }
+@media (max-width: 800px) { .contact-page { grid-template-columns: 1fr; } .contact-page aside { justify-self: center; } }

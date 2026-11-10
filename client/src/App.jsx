@@ -1,76 +1,55 @@
-// import { BrowserRouter, Routes, Route } from "react-router-dom";
-
-// import Navbar from "./components/Navbar";
-
-// import Home from "./pages/home/HomePage";
-// import Store from "./pages/store/StorePage";
-// import Product from "./pages/product/ProductPage";
-// import Cart from "./pages/cart/CartPage";
-// import Checkout from "./pages/checkout/CheckoutPage";
-// import Login from "./pages/login/LoginPage";
-// import Register from "./pages/register/RegisterPage";
-// import Orders from "./pages/orders/OrdersPage";
-// import Admin from "./pages/admin/AdminPage";
-// import Contact from "./pages/contact/ContactPage";
-
-// import ProtectedRoute from "./components/ProtectedRoute";
-
-// function App() {
-//     return (
-//         <BrowserRouter>
-//             <Navbar />
-
-//             <Routes>
-//                 <Route path="/" element={<Home />} />
-//                 <Route path="/store" element={<Store />} />
-//                 <Route path="/products/:id" element={<Product />} />
-
-//                 <Route path="/cart" element={<Cart />} />
-//                 <Route path="/login" element={<Login />} />
-//                 <Route path="/register" element={<Register />} />
-//                 <Route path="/contact" element={<Contact />} />
-
-//                 <Route element={<ProtectedRoute />}>
-//                     <Route path="/checkout" element={<Checkout />} />
-//                     <Route path="/orders" element={<Orders />} />
-//                 </Route>
-
-//                 <Route element={<ProtectedRoute adminOnly />}>
-//                     <Route path="/admin" element={<Admin />} />
-//                 </Route>
-
-//                 <Route path="*" element={<h2>404 - Page not found</h2>} />
-//             </Routes>
-//         </BrowserRouter>
-//     );
-// }
-
-// export default App;
-
-
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-
 import Navbar from "./components/Navbar";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 import Home from "./pages/home/HomePage";
+import Store from "./pages/store/StorePage";
+import Categories from "./pages/category/CategoriesPage";
+import Product from "./pages/product/ProductPage";
+import Cart from "./pages/cart/CartPage";
+import Checkout from "./pages/checkout/CheckoutPage";
+import Login from "./pages/login/LoginPage";
+import Register from "./pages/register/RegisterPage";
+import Orders from "./pages/orders/OrdersPage";
+import Admin from "./pages/admin/AdminPage";
 import Contact from "./pages/contact/ContactPage";
 
-function App() {
+export default function App() {
     return (
         <BrowserRouter>
-            <Navbar />
-
-            <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/contact" element={<Contact />} />
-
-                <Route
-                    path="*"
-                    element={<h2>404 - Page not found</h2>}
-                />
-            </Routes>
+            <div className="app-shell">
+                <Navbar />
+                <main className="page-content container">
+                    <Routes>
+                        <Route path="/" element={<Home />} />
+                        <Route path="/store" element={<Store />} />
+                        <Route path="/store/:category" element={<Store />} />
+                        <Route path="/categories" element={<Categories />} />
+                        <Route path="/product/:id" element={<Product />} />
+                        <Route path="/cart" element={<Cart />} />
+                        <Route path="/checkout" element={<ProtectedRoute role="user"><Checkout /></ProtectedRoute>} />
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/register" element={<Register />} />
+                        <Route path="/orders" element={<ProtectedRoute role="user"><Orders /></ProtectedRoute>} />
+                        <Route path="/admin" element={<ProtectedRoute role="admin"><Admin /></ProtectedRoute>} />
+                        <Route path="/contact" element={<Contact />} />
+                        <Route path="*" element={<section className="empty-state"><h1>404 - Η σελίδα δεν βρέθηκε</h1></section>} />
+                    </Routes>
+                </main>
+                <footer className="site-footer">
+                    <div className="container footer-content">
+                        <div className="first-column">
+                            <h3>&copy; 2026 AUEB Official Store</h3>
+                            <p><a href="https://www.shop.aueb.gr/" target="_blank" rel="noopener noreferrer">Επίσημη ιστοσελίδα AUEB</a></p>
+                        </div>
+                        <div className="third-column">
+                            <h3>Οικονομικό Πανεπιστήμιο Αθηνών</h3>
+                            <p>Πατησίων 76, Αθήνα</p>
+                        </div>
+                        <div className="design"><p>Σχεδίαση: pro - nik.</p></div>
+                    </div>
+                </footer>
+            </div>
         </BrowserRouter>
     );
 }
-
-export default App;

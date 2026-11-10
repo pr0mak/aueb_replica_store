@@ -1,3 +1,28 @@
 .rule-icon {
     color: red;
 }
+
+.register-card {
+    width: min(100%,640px);
+}
+
+.password-rules {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    font-size: 12px;
+}
+
+.rule-valid {
+    color: #277c50;
+}
+
+.rule-invalid {
+    color: #a45c68;
+}
+
+@media (max-width: 650px) {
+    .password-rules {
+        grid-template-columns: 1fr;
+    }
+}
