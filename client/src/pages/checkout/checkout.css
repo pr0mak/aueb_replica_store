@@ -13,3 +13,8 @@
     flex-direction: column;
     gap: 10px;
 }
+.checkout-layout { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(260px, 1fr); align-items: start; gap: 22px; }
+.checkout-layout .checkout-form { margin-bottom: 0; }
+.checkout-layout .summary-line { align-items: baseline; gap: 10px; font-size: 13px; }
+.checkout-layout .summary-line strong { white-space: nowrap; }
+@media (max-width: 750px) { .checkout-layout { grid-template-columns: 1fr; } }

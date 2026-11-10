@@ -62,7 +62,7 @@
 }
 
 .btn-remove-image {
-    background-color: #800020;
+    background-color: var(--aueb-maroon);
     color: #ffffff;
     border: none;
     border-radius: 6px;
@@ -90,17 +90,60 @@
 .import-file-label {
     display: inline-block;
     padding: 10px 16px;
-    background-color: #800020;
+    background-color: var(--aueb-maroon);
     color: white;
     border-radius: 6px;
     cursor: pointer;
 }
 
 .import-file-label:hover {
-    background-color: #600018;
+    background-color: var(--aueb-maroon);
 }
 
 .admin-import-export p {
     font-size: 14px;
     margin-top: 12px;
 }
+.admin-page .panel {
+    margin-bottom: 25px;
+}
+.table-scroll {
+    max-width: 100%;
+    overflow-x: auto;
+}
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 13px;
+}
+.admin-table th, .admin-table td {
+    padding: 12px 10px;
+    border-bottom: 1px solid #eee5e8;
+    vertical-align: middle;
+}
+.admin-table th {
+    color: var(--aueb-maroon);
+    background: #fbf7f8;
+}
+.admin-table td a {
+    color: var(--aueb-maroon);
+    font-weight: 700;
+}
+.admin-table select {
+    min-width: 150px;
+    margin: 0;
+    padding: 8px;
+}
+.admin-actions {
+    display: flex;
+    gap: 7px;
+    flex-wrap: wrap;
+}
+.admin-actions .btn {
+    font-size: 12px;
+    padding: 8px 10px;
+}
+.btn-danger { background: #9d2332; border-color: #9d2332; }
+.btn-danger:hover:not(:disabled) { background: #7c1b28; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }

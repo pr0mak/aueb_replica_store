@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "./contact.css";
 
 const initialForm = {
     fullname: "",
@@ -149,7 +150,7 @@ function ContactPage() {
     };
 
     return (
-        <main>
+        <section className="contact-page">
             <h1>Επικοινωνία με το AUEB Official Store</h1>
 
             <article>
@@ -308,7 +309,7 @@ function ContactPage() {
                     </div>
                 </div>
             </aside>
-        </main>
+        </section>
     );
 
 }

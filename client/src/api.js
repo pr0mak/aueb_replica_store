@@ -55,6 +55,10 @@ export const authApi = {
 
 export const ordersApi = {
     all: token => request("/orders", { token }),
+    adminAll: token => request("/orders/admin", { token }),
+    setStatus: (id, status, token) => request(`/orders/${encodeURIComponent(id)}/status`, {
+        method: "PATCH", token, body: JSON.stringify({ status })
+    }),
     checkout: (items, token) => request("/orders", {
         method: "POST",
         token,
