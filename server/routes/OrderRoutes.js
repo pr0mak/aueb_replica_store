@@ -2,13 +2,14 @@ const express = require("express");
 const router = express.Router();
 
 const {
-    myOrders,
-    checkout } = require("../controllers/OrderController");
+    myOrders, checkout, adminOrders, updateOrderStatus } = require("../controllers/OrderController");
 
 const {
     verifyToken,
-    verifyCustomer} = require("../middleware/Auth");
+    verifyCustomer, verifyAdmin} = require("../middleware/Auth");
 
+router.get("/admin", verifyToken, verifyAdmin, adminOrders);
+router.patch("/:id/status", verifyToken, verifyAdmin, updateOrderStatus);
 router.get("/", verifyToken, verifyCustomer, myOrders);
 router.post("/", verifyToken, verifyCustomer, checkout);
 

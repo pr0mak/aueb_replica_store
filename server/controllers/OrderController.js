@@ -19,6 +19,74 @@ async function myOrders(req, res, next) {
     }
 }
 
+//epistrefei oles tis paraggelies gia ton admin
+async function adminOrders(req, res, next) {
+    try {
+        const orders = await Order.find({})
+            .populate("user", "email")
+            .sort({ createdAt: -1 })
+            .lean();
+
+        return res.json(orders);
+
+    } catch (error) {
+        next(error);
+    }
+}
+
+//allagh katastashs paraggelias apo ton admin
+async function updateOrderStatus(req, res, next) {
+    try {
+        const { id } = req.params;
+        const { status } = req.body;
+
+        const validStatuses = [
+            "Σε επεξεργασία",
+            "Απεστάλη",
+            "Ολοκληρώθηκε",
+            "Ακυρώθηκε"
+        ];
+
+        //elegxos egkurotitas id
+        if (!mongoose.isValidObjectId(id)) {
+            return res.status(400).json({
+                success: false,
+                message: "Μη έγκυρο ID παραγγελίας."
+            });
+        }
+
+        //elegxos katastashs
+        if (!validStatuses.includes(status)) {
+            return res.status(400).json({
+                success: false,
+                message: "Μη έγκυρη κατάσταση παραγγελίας."
+            });
+        }
+
+        //enhmerwsh paraggelias
+        const order = await Order.findByIdAndUpdate(
+            id,
+            { status },
+            {
+                new: true,
+                runValidators: true
+            }
+        ).populate("user", "email");
+
+        if (!order) {
+            return res.status(404).json({
+                success: false,
+                message: "Η παραγγελία δεν βρέθηκε."
+            });
+        }
+
+        return res.json(order);
+
+    } catch (error) {
+        next(error);
+    }
+}
+
 //dhmiourgia paraggelias
 async function checkout(req, res, next) {
 
@@ -158,5 +226,7 @@ async function checkout(req, res, next) {
 
 module.exports = {
     myOrders,
-    checkout
+    checkout,
+    adminOrders,
+    updateOrderStatus
 };
