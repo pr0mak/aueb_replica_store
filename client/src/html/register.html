@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="el">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Εγγραφή - AUEB Official Store</title>
+
+    <link rel="stylesheet" href="/styles/style.css">
+
+    <script src="js/custom_alert.js" defer></script>
+
+    <script src="js/register.js" defer></script>
+</head>
+
+<body>
+    <div class="container">
+
+        <header>
+            <div class="header-top">
+                <table class="aueb-profile">
+                    <tr>
+                        <th class="logo">
+                            <a href="index.html" aria-label="Αρχική σελίδα">
+                                <img src="/assets/aueb_logo.jpg" alt="Λογότυπο Οικονομικού Πανεπιστημίου Αθηνών">
+                            </a>
+                        </th>
+                    </tr>
+                </table>
+
+                <div class="header-actions">
+                    <a href="login.html" class="login-link">Login</a>
+                </div>
+            </div>
+
+            <nav aria-label="Κεντρικό μενού">
+                <ul>
+                    <li><a href="index.html">Αρχική</a></li>
+                    <li><a href="store.html">Κατάστημα</a></li>
+                    <li><a href="buy.html">Παραγγελία</a></li>
+                    <li><a href="contact.html">Επικοινωνία</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <main class="login-main">
+            <section class="login-card">
+
+                <h1>Εγγραφή χρήστη</h1>
+
+                <p>Δημιούργησε τον λογαριασμό σου στο AUEB Official Store!</p>
+
+                <form class="form" id="registerForm" action="#" method="post">
+
+                    <section>
+                        <label for="firstname">Όνομα:</label>
+                        <input type="text" id="firstname" name="firstname" required pattern="[Α-Ω]+([ \-][Α-Ω]+)*" placeholder="Πληκτρολόγησε το όνομά σου" autocomplete="given-name">
+                    </section>
+
+
+
+                    <section>
+                        <label for="lastname">Επώνυμο:</label>
+                        <input type="text" id="lastname" name="lastname" required pattern="[Α-Ω]+([ \-][Α-Ω]+)*" placeholder="Πληκτρολόγησε το επώνυμό σου" autocomplete="family-name">
+                    </section>
+
+                    <section>
+                        <label for="phone">Τηλέφωνο:</label>
+                        <input type="tel" id="phone" name="phone" required pattern="^69\d{8}$" placeholder="π.χ. 6969696969" autocomplete="tel">
+                    </section>
+
+                    <section>
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" required pattern="^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$" placeholder="example@gmail.com" autocomplete="email">
+                    </section>
+
+                    <section>
+                        <label for="password">Κωδικός πρόσβασης:</label>
+                        <input type="password" id="password" name="password" required minlength="8" pattern="^(?=.*[a-zA-Zα-ωΑ-Ω])(?=.*\d)(?=.*[!@#$%^&*]).{8,}$" placeholder="Δημιούργησε έναν κωδικό" autocomplete="new-password">
+
+                        <div class="password-rules" id="passwordRules">
+                            <p id="ruleLength" class="rule invalid"><span class="rule-icon">✘</span> Τουλάχιστον 8 χαρακτήρες</p>
+                            <p id="ruleLetter" class="rule invalid"><span class="rule-icon">✘</span> Τουλάχιστον ένα γράμμα</p>
+                            <p id="ruleNumber" class="rule invalid"><span class="rule-icon">✘</span> Τουλάχιστον έναν αριθμό</p>
+                            <p id="ruleSymbol" class="rule invalid"><span class="rule-icon">✘</span> Τουλάχιστον ένα σύμβολο (!@#$%^&*)</p>
+                        </div>
+                    </section>
+
+                    <section>
+                        <label for="epalpassword">Επαλήθευση κωδικού πρόσβασης:</label>
+                        <input type="password" id="epalpassword" name="password" required minlength="8" pattern="^(?=.*[a-zA-Zα-ωΑ-Ω])(?=.*\d)(?=.*[!@#$%^&*]).{8,}$" placeholder="Ξαναγράψτε τον κωδικό" autocomplete="new-password">
+                    </section>
+
+                    <div class="buttons">
+                        <input type="submit" value="Εγγραφή">
+                        <input type="reset" value="Καθαρισμός">
+                    </div>
+
+                    <p class="back-home">
+                        Έχεις ήδη λογαριασμό;
+                        <a href="login.html">Σύνδεση</a>
+                    </p>
+
+                    <p class="back-home">
+                        <a href="index.html">Επιστροφή στην Αρχική Σελίδα</a>
+                    </p>
+
+                </form>
+            </section>
+        </main>
+
+        <footer>
+            <div class="first-column">
+                <h3>&copy; 2026 AUEB Official Store</h3>
+                <p>
+                    <a href="https://www.shop.aueb.gr/">
+                    Επίσημη ιστοσελίδα AUEB
+                </a>
+                </p>
+            </div>
+
+            <div class="third-column">
+                <h3>Οικονομικό Πανεπιστήμιο Αθηνών</h3>
+                <p>Πατησίων 76, Αθήνα</p>
+            </div>
+
+            <div class="design">
+                <p>Σχεδίαση: AuebStore.</p>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- custom alert-->
+    <div id="customAlert" class="modal-overlay hidden">
+        <div class="modal-box">
+            <p id="alertMessage"></p>
+            <button id="alertOkBtn">Εντάξει</button>
+        </div>
+    </div>
+
+</body>
+
+</html>

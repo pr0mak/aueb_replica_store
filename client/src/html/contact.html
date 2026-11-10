@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="el">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AUEB Official Store - Επικοινωνία</title>
+    <link rel="stylesheet" href="/styles/style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script src="js/custom_alert.js" defer></script>
+    <script src="js/contact.js" defer></script>
+    <script src="js/auth-ui.js" defer></script>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div class="header-top">
+                <table class="aueb-profile">
+                    <tr>
+                        <th class="logo">
+                            <a href="index.html" aria-label="Αρχική σελίδα">
+                                <img src="/assets/aueb_logo.jpg" alt="Λογότυπο Οικονομικού Πανεπιστημίου Αθηνών">
+                            </a>
+                        </th>
+                    </tr>
+                </table>
+
+                <div class="header-actions" id="headerActions">
+                    <a href="register.html" class="login-link">Register</a>
+                    <a href="login.html" class="login-link">Login</a>
+                </div>
+            </div>
+
+            <nav aria-label="Κεντρικό μενού">
+                <ul>
+                    <li><a href="index.html">Αρχική</a></li>
+                    <li><a href="store.html">Κατάστημα</a></li>
+                    <li><a href="buy.html">Παραγγελία</a></li>
+                    <li><a href="contact.html" aria-current="page">Επικοινωνία</a></li>
+                    <li id="adminLink" class="admin-only hidden">
+                        <a href="admin.html">Admin Panel</a>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+
+        <main>
+            <h1>Επικοινωνία με το AUEB Official Store</h1>
+
+            <article>
+                <h2>Στείλτε μας το μήνυμά σας</h2>
+                <p>
+                    Για οποιαδήποτε απορία σχετικά με τα προϊόντα ή τις παραγγελίες σας, συμπληρώστε την παρακάτω φόρμα επικοινωνίας.
+                </p>
+
+                <form class="form contact" id="contactForm" novalidate>
+
+                    <label for="txtName">Ονοματεπώνυμο(*):</label>
+                    <input type="text" id="txtName" name="Name" required pattern="[Α-Ω]+([ \-][Α-Ω]+)*" placeholder="Πληκτρολόγησε το όνομά σου" autocomplete="given-name">
+
+                    <label for="txtEmail">Email(*):</label>
+                    <input type="email" id="txtEmail" name="email" required placeholder="example@gmail.com" autocomplete="email">
+
+                    <label for="txtTel">Τηλέφωνο(*):</label>
+                    <input type="tel" id="txtTel" name="phone" required pattern="^69\d{8}$" placeholder="π.χ. 6969696969" autocomplete="tel">
+
+                    <label for="txtMessage">Μήνυμα / Ερώτηση (*):</label>
+                    <textarea id="txtMessage" name="message" rows="6" cols="40">
+            </textarea>
+
+                    <p>(*) Τα πεδία με αστερίσκο είναι υποχρεωτικά.</p>
+
+                    <div class="buttons">
+                        <input type="submit" value="Αποστολή μηνύματος">
+                        <input type="reset" value="Καθαρισμός">
+                    </div>
+                </form>
+            </article>
+
+            <aside>
+                <div class="counters">
+                    <p>Επισκέψεις σελίδας: <span>12</span></p>
+                    <p>Συνολικές επισκέψεις: <span>1050</span></p>
+                </div>
+
+                <div class="flipping-card">
+                    <div class="offer">
+                        <div class="image">
+                            <img src="/assets/CAMPUS_LOOK_BUNDLE.png" alt="Πακέτο φοιτητικών προϊόντων CAMPUS LOOK">
+                        </div>
+
+                        <div class="price">
+                            <span class="old_price">15 €</span> 10 €
+                        </div>
+
+                        <h3>CAMPUS LOOK BUNDLE</h3>
+                        <p>Μοναδική προσφορά για φοιτητές</p>
+
+                        <button type="button" id="bundleBtn">
+                            Αγόρασε τώρα!
+                        </button>
+                    </div>
+
+                    <div class="front">
+                        <div class="item">
+                            <span>Προσφορά ημέρας</span>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </main>
+
+        <footer>
+            <div class="first-column">
+                <h3>&copy; AUEB Official Store 2026</h3>
+                <p>
+                    <a href="https://www.shop.aueb.gr/">
+                    Επίσημη ιστοσελίδα AUEB
+                </a>
+                </p>
+            </div>
+
+            <div class="third-column">
+                <h3>Οικονομικό Πανεπιστήμιο Αθηνών</h3>
+                <p>Πατησίων 76, Αθήνα</p>
+            </div>
+
+            <div class="design">
+                <p>Σχεδίαση: AuebStore.</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- custom alert-->
+    <div id="customAlert" class="modal-overlay hidden">
+        <div class="modal-box">
+            <p id="alertMessage"></p>
+            <button id="alertOkBtn">Εντάξει</button>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("bundleBtn").addEventListener("click", function() {
+            localStorage.setItem("aueb_offer", "1");
+            window.location.href = "buy.html";
+        });
+    </script>
+
+</body>
+
+</html>

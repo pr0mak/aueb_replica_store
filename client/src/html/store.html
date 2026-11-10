@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="el">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AUEB Official Store - Προϊόντα</title>
+    <link rel="stylesheet" href="/styles/style.css">
+
+    <script src="js/auth-ui.js" defer></script>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div class="header-top">
+                <table class="aueb-profile">
+                    <tr>
+                        <th class="logo">
+                            <a href="index.html" aria-label="Αρχική σελίδα">
+                                <img src="/assets/aueb_logo.jpg" alt="Λογότυπο Οικονομικού Πανεπιστημίου Αθηνών">
+                            </a>
+                        </th>
+                    </tr>
+                </table>
+
+                <div class="header-actions" id="headerActions">
+                    <a href="register.html" class="login-link">Register</a>
+                    <a href="login.html" class="login-link">Login</a>
+                </div>
+            </div>
+
+            <nav aria-label="Κεντρικό μενού">
+                <ul>
+                    <li><a href="index.html">Αρχική</a></li>
+                    <li><a href="store.html" aria-current="page">Κατάστημα</a></li>
+                    <li><a href="buy.html">Παραγγελία</a></li>
+                    <li><a href="contact.html">Επικοινωνία</a></li>
+                    <li id="adminLink" class="admin-only hidden">
+                        <a href="admin.html">Admin Panel</a>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+
+        <main>
+            <h1>Διαλέξτε κατηγορία</h1>
+
+            <!-- <article>
+            <table class="table-categories">
+                <caption>Κατηγορίες</caption>
+
+                <thead>
+                    <tr>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <td>
+                            <a href="clothes.html">
+                                <img
+                                    src="/assets/endisi.png"
+                                    alt="Ένδυση"
+                                >
+                            </a>
+                        </td>
+
+                        <td>
+                            <a href="office_supplies.html">
+                                <img
+                                    src="/assets/general_supplies.png"
+                                    alt="Είδη Γραφείου"
+                                >
+                            </a>
+                        </td>
+                        
+                        <td>
+                            <a href="accessories.html">
+                                <img
+                                    src="/assets/general_acc.png"
+                                    alt="Αξεσουάρ"
+                                >
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </article> -->
+
+            <article class="categories-article">
+                <div class="categories-grid">
+
+                    <a href="clothes.html" class="category-card">
+                        <img src="/assets/endisi.png" alt="Ένδυση">
+                        <div class="category-card-body">
+                            <h2>Ένδυση</h2>
+                            <span class="category-card-cta">Δείτε τα προϊόντα →</span>
+                        </div>
+                    </a>
+
+                    <a href="office_supplies.html" class="category-card">
+                        <img src="/assets/general_supplies.png" alt="Είδη Γραφείου">
+                        <div class="category-card-body">
+                            <h2>Είδη Γραφείου</h2>
+                            <span class="category-card-cta">Δείτε τα προϊόντα →</span>
+                        </div>
+                    </a>
+
+                    <a href="accessories.html" class="category-card">
+                        <img src="/assets/general_acc.png" alt="Αξεσουάρ">
+                        <div class="category-card-body">
+                            <h2>Αξεσουάρ</h2>
+                            <span class="category-card-cta">Δείτε τα προϊόντα →</span>
+                        </div>
+                    </a>
+
+                </div>
+            </article>
+
+        </main>
+
+        <footer>
+            <div class="first-column">
+                <h3>&copy; AUEB Official Store 2026</h3>
+                <p>
+                    <a href="https://www.shop.aueb.gr/">
+                    Επίσημη ιστοσελίδα AUEB
+                </a>
+                </p>
+            </div>
+
+            <div class="third-column">
+                <h3>Οικονομικό Πανεπιστήμιο Αθηνών</h3>
+                <p>Πατησίων 76, Αθήνα</p>
+            </div>
+
+            <div class="design">
+                <p>Σχεδίαση: AuebStore.</p>
+            </div>
+        </footer>
+    </div>
+</body>
+
+</html>
