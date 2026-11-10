@@ -20,13 +20,54 @@ export default function AdminPage() {
     const [message, setMessage] = useState("");
 
     useEffect(() => {
-        let active = true;
-        Promise.all([productsApi.all(), ordersApi.adminAll(token)])
-            .then(([productData, orderData]) => { if (active) { setProducts(productData); setOrders(orderData); } })
-            .catch(err => { if (active) setError(err.message); })
-            .finally(() => { if (active) setLoading(false); });
-        return () => { active = false; };
-    }, [token]);
+    let active = true;
+
+    async function loadAdminData() {
+        setLoading(true);
+        setError("");
+
+        const results = await Promise.allSettled([
+            productsApi.all(),
+            ordersApi.adminAll(token)
+        ]);
+
+        if (!active) {
+            return;
+        }
+
+        const [productsResult, ordersResult] = results;
+
+        // Φόρτωση προϊόντων
+        if (productsResult.status === "fulfilled") {
+            setProducts(productsResult.value);
+        } else {
+            setError(
+                "Σφάλμα φόρτωσης προϊόντων: " +
+                productsResult.reason.message
+            );
+        }
+
+        // Φόρτωση παραγγελιών
+        if (ordersResult.status === "fulfilled") {
+            setOrders(ordersResult.value);
+        } else {
+            setError((previous) =>
+                previous +
+                (previous ? " | " : "") +
+                "Σφάλμα φόρτωσης παραγγελιών: " +
+                ordersResult.reason.message
+            );
+        }
+
+        setLoading(false);
+    }
+
+    loadAdminData();
+
+    return () => {
+        active = false;
+    };
+}, [token]);
 
     function change(event) {
         const { name, value } = event.target;
