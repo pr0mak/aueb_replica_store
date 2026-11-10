@@ -1,4 +1,3 @@
-// AUEB-WEB-2026
 import React from "react";
 import { Link } from "react-router-dom";
 

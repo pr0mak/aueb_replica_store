@@ -1,88 +1,84 @@
-import {
+import React, {
     createContext,
     useContext,
+    useMemo,
     useState
 } from "react";
 
-import { login as loginAPI } from "../services/api";
+import { authApi } from "../api";
 
 const AuthContext = createContext(null);
 
-export function AuthProvider({ children }) {
+const STORAGE_KEY = "aueb_session_v2";
 
-    const [user, setUser] = useState(() => {
-        try {
-            const savedUser = localStorage.getItem("user");
-            const token = localStorage.getItem("token");
-
-            return token && savedUser
-                ? JSON.parse(savedUser)
-                : null;
-        } catch {
-            return null;
-        }
-    });
-
-    // Login
-    const login = async (email, password) => {
-        const data = await loginAPI({
-            email,
-            password
-        });
-
-        if (!data.token || !data.user) {
-            throw new Error("Invalid login response");
-        }
-
-        localStorage.setItem("token", data.token);
-        localStorage.setItem(
-            "user",
-            JSON.stringify(data.user)
+//diavazei sundesh apo to localstorage
+function getStoredSession() {
+    try {
+        const value = JSON.parse(
+            localStorage.getItem(STORAGE_KEY)
         );
 
-        setUser(data.user);
+        return value?.token && value?.user ? value : null;
+    } catch {
+        return null;
+    }
+}
 
-        return data;
-    };
+export function AuthProvider({ children }) {
 
-    // Logout
-    const logout = () => {
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
+    const [session, setSession] = useState(getStoredSession);
 
-        setUser(null);
-    };
+    //sundesh xrhsth
+    async function login(credentials) {
+        const response = await authApi.login(credentials);
 
-    // Authentication state
-    const isAuthenticated = Boolean(user);
+        const next = {
+            token: response.token,
+            user: response.user
+        };
 
-    // Role check
-    const isAdmin = user?.role === "admin";
+        //apothkeush sto localstorage
+        localStorage.setItem(
+            STORAGE_KEY,
+            JSON.stringify(next)
+        );
+
+        //enhmerwsh tou React state
+        setSession(next);
+
+        return response.user;
+    }
+
+    //aposundesh xrhsth
+    function logout() {
+
+        //diagrafh apo to localstorage
+        localStorage.removeItem(STORAGE_KEY);
+
+        //enhmerwsh tou react state
+        setSession(null);
+    }
+
+    const value = useMemo(() => ({
+        token: session?.token || null,
+        user: session?.user || null,
+        login,
+        logout
+    }), [session]);
 
     return (
-        <AuthContext.Provider
-            value={{
-                user,
-                login,
-                logout,
-                isAuthenticated,
-                isAdmin
-            }}
-        >
+        <AuthContext.Provider value={value}>
             {children}
         </AuthContext.Provider>
     );
 }
 
-// Custom hook
 export function useAuth() {
-    const context = useContext(AuthContext);
+    const value = useContext(AuthContext);
 
-    if (!context) {
-        throw new Error(
-            "useAuth must be used inside AuthProvider"
-        );
+    if (!value) {
+        throw new Error("AuthProvider is missing");
     }
 
-    return context;
+    return value;
 }
