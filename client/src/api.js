@@ -65,3 +65,15 @@ export const ordersApi = {
         body: JSON.stringify({ items })
     })
 };
+
+export const reviewsApi = {
+    all: (productId) =>
+        request(`/products/${encodeURIComponent(productId)}/reviews`),
+
+    save: (productId, rating, comment, token) =>
+        request(`/products/${encodeURIComponent(productId)}/reviews`, {
+            method: "POST",
+            token,
+            body: JSON.stringify({ rating, comment })
+        })
+};
