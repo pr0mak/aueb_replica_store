@@ -141,8 +141,6 @@ GET http://localhost:5000/api/orders
     }
 }
 
-THELEI TROPOPOIHSH TO MONGODB MENEI MONO TO APO KATW OLA TA ALLA DOULEVEOUN 100%
-
 POST http://localhost:5000/api/orders
 
 Πάτησε την καρτέλα Authorization.
