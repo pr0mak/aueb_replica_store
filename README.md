@@ -1,18 +1,76 @@
-# Istos_part2
 
-    npm install express mongoose dotenv cors bcrypt jsonwebtoken
-    
-    node server.js
-    
-    npm run seed
+# AUEB Official Store
 
-CODES --->
+## Στοιχεία ομάδας
 
-    200 -- OK -- The request is OK (this is the standard response for successful HTTP requests)
-    201 -- Created -- The request has been fulfilled, and a new resource is created
-    400 -- Bad Request -- The request cannot be fulfilled due to bad syntax
-    401 -- Unauthorized	 -- The request was a legal request, but the server is refusing to respond to it. For use when authentication is possible but has failed or not yet been provided
-    403 -- Forbidden -- The request was a legal request, but the server is refusing to respond to it
-    404 -- Not found -- The requested page could not be found but may be available again in the future
-    409 -- Conflict
+| Ονοματεπώνυμο | Αριθμός Μητρώου (ΑΜ) |
+| :--- | :--- |
+| **Πρόδρομος-Άρης Μακαρούνας** | 3230111 |
+| **Νικόλαος Πουλόπουλος** | 3230170 |
 
+## Οδηγίες εγκατάστασης
+
+Απαιτούνται:
+- Node.js και npm
+- MongoDB
+
+### 1. Εγκατάσταση Backend
+
+Ανοίγουμε terminal στον φάκελο server:
+
+```bash
+cd server
+npm install
+```
+
+### 2. Ρύθμιση .env
+
+Δημιουργούμε αρχείο server/.env ακολουθόντας το template του .env.example:
+
+```env
+PORT=5000
+MONGO_URI=mongodb://localhost:27017/istos?retryWrites=false
+JWT_SECRET=your_jwt_secret_here
+```
+
+### 3. Αρχικοποίηση βάσης δεδομένων(προσθήκη των products και τον user-admin)
+
+Με τη MongoDB ενεργή, εκτελούμε:
+
+```bash
+npm run seed
+```
+
+### 4. Εκκίνηση Backend
+
+```bash
+npm run dev
+```
+
+Ο backend server εκτελείται στη θύρα 5000.
+
+### 5. Εγκατάσταση και εκκίνηση Frontend
+
+Σε δεύτερο terminal:
+
+```bash
+cd client
+npm install
+npm run dev
+```
+
+Η εφαρμογή ανοίγει στη διεύθυνση:
+
+http://localhost:5173
+
+## Λογαριασμοί δοκιμής
+
+### Administrator
+Email: admin@aueb.gr
+
+Password: Admin123!
+
+### User
+Email: user@aueb.gr
+
+Password: User123!
