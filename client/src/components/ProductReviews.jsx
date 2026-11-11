@@ -1,7 +1,7 @@
-
 import { useEffect, useState } from "react";
 import { reviewsApi } from "../api";
 import { useAuth } from "../context/AuthContext";
+import "./ProductReviews.css";
 
 function ProductReviews({ productId }) {
     const { user, token } = useAuth();
@@ -98,23 +98,34 @@ function ProductReviews({ productId }) {
                         {reviews.length > 0 && " / 5"}
                     </p>
 
-                    {reviews.map((review) => (
-                        <article key={review._id}>
-                            <p>
-                                <strong>
-                                    {"★".repeat(review.rating)}
-                                    {"☆".repeat(5 - review.rating)}
-                                </strong>
-                            </p>
+                   
+<div
+    className="reviews-scroll"
+    aria-label="Αξιολογήσεις χρηστών"
+    tabIndex={0}
+>
+        {reviews.map((review) => (
+            <article
+                className="review-card"
+                key={review._id}
+            >
+                <div className="review-stars">
+                    {"★".repeat(review.rating)}
+                    {"☆".repeat(5 - review.rating)}
+                </div>
 
-                            <p>
-                                {review.user?.firstname}{" "}
-                                {review.user?.lastname}
-                            </p>
+                <h4 className="review-author">
+                    {review.user?.firstname}{" "}
+                    {review.user?.lastname}
+                </h4>
 
-                            <p>{review.comment}</p>
-                        </article>
-                    ))}
+                <p className="review-comment">
+                    {review.comment}
+                </p>
+            </article>
+        ))}
+    </div>
+
                 </>
             )}
 
