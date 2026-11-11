@@ -1,17 +1,65 @@
 const mongoose = require("mongoose");
 const Product = require("../models/Product");
+const Review = require("../models/Review");
 const { validateProductInput, CATEGORIES } = require("../utils/validators");
+
 
 async function getAllProducts(req, res, next) {
     try {
         const { category } = req.query;
-        if (category !== undefined && !CATEGORIES.includes(category)) {
-            return res.status(400).json({ success: false, message: "Μη έγκυρη κατηγορία." });
+
+        if (
+            category !== undefined &&
+            !CATEGORIES.includes(category)
+        ) {
+            return res.status(400).json({
+                success: false,
+                message: "Μη έγκυρη κατηγορία."
+            });
         }
-        const products = await Product.find(category ? { category } : {}).sort({ createdAt: 1, _id: 1 }).lean();
-        return res.json(products);
-    } catch (error) { next(error); }
+
+        const products = await Product.find(
+            category ? { category } : {}
+        )
+            .sort({ createdAt: 1, _id: 1 })
+            .lean();
+
+        const ratings = await Review.aggregate([
+            {
+                $group: {
+                    _id: "$product",
+                    averageRating: { $avg: "$rating" },
+                    reviewCount: { $sum: 1 }
+                }
+            }
+        ]);
+
+        const ratingsMap = new Map(
+            ratings.map(r => [
+                String(r._id),
+                r
+            ])
+        );
+
+        const result = products.map(product => {
+            const stats = ratingsMap.get(
+                String(product._id)
+            );
+
+            return {
+                ...product,
+                averageRating: stats?.averageRating ?? 0,
+                reviewCount: stats?.reviewCount ?? 0
+            };
+        });
+
+        return res.json(result);
+
+    } catch (error) {
+        next(error);
+    }
 }
+
 
 async function getProductsByCategory(req, res, next) {
     if (!CATEGORIES.includes(req.params.category)) {

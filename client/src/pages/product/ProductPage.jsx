@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { productsApi } from "../../api";
 import { CATEGORIES, money } from "../../constants";
 import { useCart } from "../../context/CartContext";
+import ProductReviews from "../../components/ProductReviews";
 import "./product.css";
 
 export default function ProductPage() {
@@ -55,6 +56,10 @@ export default function ProductPage() {
                 </div>}
                 {message && <p className="alert success" role="status">{message} <Link className="text-link" to="/cart">Προβολή καλαθιού</Link></p>}
             </div>
+        </div>
+
+        <div className="panel product-reviews-panel">
+            <ProductReviews productId={product._id} />
         </div>
     </section>;
 }

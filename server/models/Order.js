@@ -48,6 +48,7 @@ const orderSchema = new mongoose.Schema({
         type: String,
         enum: [
             "Σε επεξεργασία",
+            "Απεστάλη",
             "Ολοκληρώθηκε",
             "Ακυρώθηκε"
         ],

@@ -7,6 +7,7 @@ app.use(express.json());
 app.use("/api/auth", require("./routes/AuthRoutes"));
 app.use("/api", require("./routes/ProductsRoutes"));
 app.use("/api/orders", require("./routes/OrderRoutes"));
+app.use("/api/products", require("./routes/ProductsRoutes"));
 
 const { verifyToken, verifyCustomer } = require("./middleware/Auth");
 const { checkout } = require("./controllers/OrderController");
