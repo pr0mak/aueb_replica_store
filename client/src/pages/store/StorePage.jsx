@@ -1,5 +1,11 @@
-import { useEffect, useMemo, useState } from "react";
-import { Link, useParams, useNavigate } from "react-router-dom";
+
+import { useEffect, useState } from "react";
+import {
+    Link,
+    useParams,
+    useNavigate,
+    useSearchParams
+} from "react-router-dom";
 
 import { productsApi } from "../../api";
 import { CATEGORIES } from "../../constants";
@@ -16,20 +22,53 @@ export default function StorePage() {
     const [search, setSearch] = useState("");
     const [sort, setSort] = useState("default");
 
-    const { category: categoryParam } = useParams();
-    const navigate = useNavigate();
+    //stoixeia selidopoihshs
+    const [totalPages, setTotalPages] = useState(1);
+    const [totalProducts, setTotalProducts] = useState(0);
 
+    //kathgoria apo to URL
+    const { category: categoryParam } = useParams();
     const category = categoryParam || "all";
 
-    //fortwsh products apo ton server
+    const navigate = useNavigate();
+
+    //arithmos selidas apo to URL
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    const pageParam = Number(searchParams.get("page") || "1");
+
+    const page =
+        Number.isSafeInteger(pageParam) && pageParam > 0
+            ? pageParam
+            : 1;
+
+    //fortwsh proiontwn ana selida apo ton server
     useEffect(() => {
         let active = true;
 
-        productsApi.all()
+        setLoading(true);
+        setError("");
+
+        productsApi.paginated({
+            page,
+            category,
+            search,
+            sort
+        })
             .then((data) => {
-                if (active) {
-                    setProducts(data);
+                if (!active) {
+                    return;
                 }
+
+                //an h selida den uparxei, pame sthn prwth
+                if (page > data.totalPages) {
+                    setSearchParams({}, { replace: true });
+                    return;
+                }
+
+                setProducts(data.products);
+                setTotalPages(data.totalPages);
+                setTotalProducts(data.totalProducts);
             })
             .catch((err) => {
                 if (active) {
@@ -45,36 +84,10 @@ export default function StorePage() {
         return () => {
             active = false;
         };
-    }, []);
 
-    //filtrarisma kai tajinomhsh proiontwn
-    const filtered = useMemo(() => {
+    }, [page, category, search, sort, setSearchParams]);
 
-        const query = search.trim().toLocaleLowerCase("el-GR");
-
-        const result = products.filter((p) => {
-            const matchesCategory =
-                category === "all" || p.category === category;
-
-            const matchesSearch =
-                p.name.toLocaleLowerCase("el-GR").includes(query);
-
-            return matchesCategory && matchesSearch;
-        });
-
-        if (sort === "price-asc") {
-            result.sort((a, b) => a.price - b.price);
-        }
-
-        if (sort === "price-desc") {
-            result.sort((a, b) => b.price - a.price);
-        }
-
-        return result;
-
-    }, [products, category, search, sort]);
-
-    //allagh kathgorias mesw url
+    //allagh kathgorias mesw URL
     function handleCategoryChange(event) {
         const selectedCategory = event.target.value;
 
@@ -85,12 +98,50 @@ export default function StorePage() {
         }
     }
 
+    //allagh anazhthshs
+    function handleSearchChange(event) {
+        setSearch(event.target.value);
+
+        //epistrofh sthn prwth selida
+        setSearchParams({});
+    }
+
+    //allagh taxinomhshs
+    function handleSortChange(event) {
+        setSort(event.target.value);
+
+        //epistrofh sthn prwth selida
+        setSearchParams({});
+    }
+
+    //allagh selidas
+    function changePage(newPage) {
+
+        if (newPage < 1 || newPage > totalPages) {
+            return;
+        }
+
+        if (newPage === 1) {
+            setSearchParams({});
+        } else {
+            setSearchParams({
+                page: String(newPage)
+            });
+        }
+    }
+
     //katharismos filtrwn
     function clearFilters() {
         setSearch("");
         setSort("default");
         navigate("/store");
     }
+
+    //arithmoi selidwn
+    const pageNumbers = Array.from(
+        { length: totalPages },
+        (_, i) => i + 1
+    );
 
     return (
         <section className="section-block">
@@ -123,7 +174,7 @@ export default function StorePage() {
                         type="search"
                         placeholder="Π.χ. μπλουζάκι"
                         value={search}
-                        onChange={(e) => setSearch(e.target.value)}
+                        onChange={handleSearchChange}
                     />
                 </label>
 
@@ -147,13 +198,13 @@ export default function StorePage() {
                     </select>
                 </label>
 
-                {/* tajinomhsh */}
+                {/* taxinomhsh */}
                 <label>
                     Ταξινόμηση
 
                     <select
                         value={sort}
-                        onChange={(e) => setSort(e.target.value)}
+                        onChange={handleSortChange}
                     >
                         <option value="default">
                             Προεπιλογή
@@ -182,18 +233,76 @@ export default function StorePage() {
             ) : (
                 <>
                     <p className="muted" role="status">
-                        {filtered.length} προϊόντα
+                        {totalProducts} προϊόντα συνολικά
                     </p>
 
-                    {filtered.length > 0 ? (
-                        <div className="product-grid">
-                            {filtered.map((p) => (
-                                <ProductCard
-                                    key={p._id}
-                                    product={p}
-                                />
-                            ))}
-                        </div>
+                    {products.length > 0 ? (
+                        <>
+                            {/* emfanisi proiontwn */}
+                            <div className="product-grid">
+                                {products.map((p) => (
+                                    <ProductCard
+                                        key={p._id}
+                                        product={p}
+                                    />
+                                ))}
+                            </div>
+
+                            {/* selidopoihsh */}
+                            {totalPages > 1 && (
+                                <nav
+                                    className="pagination"
+                                    aria-label="Σελιδοποίηση προϊόντων"
+                                >
+
+                                    <button
+                                        type="button"
+                                        className="pagination-btn"
+                                        disabled={page === 1}
+                                        onClick={() => changePage(page - 1)}
+                                    >
+                                        Προηγούμενη
+                                    </button>
+
+                                    {pageNumbers.map((number) => (
+                                        <button
+                                            key={number}
+                                            type="button"
+                                            className={
+                                                page === number
+                                                    ? "pagination-btn active"
+                                                    : "pagination-btn"
+                                            }
+                                            aria-current={
+                                                page === number
+                                                    ? "page"
+                                                    : undefined
+                                            }
+                                            onClick={() => changePage(number)}
+                                        >
+                                            {number}
+                                        </button>
+                                    ))}
+
+                                    <button
+                                        type="button"
+                                        className="pagination-btn"
+                                        disabled={page === totalPages}
+                                        onClick={() => changePage(page + 1)}
+                                    >
+                                        Επόμενη
+                                    </button>
+
+                                </nav>
+                            )}
+
+                            {/* plhroforia selidas */}
+                            {totalPages > 1 && (
+                                <p className="pagination-info">
+                                    Σελίδα {page} από {totalPages}
+                                </p>
+                            )}
+                        </>
                     ) : (
                         <div className="empty-state">
 

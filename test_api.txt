@@ -168,3 +168,9 @@ vale auto sto body
     }
   ]
 }
+
+EXW VALEI LIMIT 6 PROS TO PARON STA PRODUCTS GIA TO PAGING
+
+GET http://localhost:5173/store?page=1
+
+GET http://localhost:5173/store?page=2
