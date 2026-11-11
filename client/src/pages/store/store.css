@@ -250,3 +250,47 @@ aside .flipping-card .front .item {
 .store-filters { display: flex; flex-wrap: wrap; align-items: end; gap: 15px; padding: 20px; margin-bottom: 22px; }
 .store-filters label { flex: 1 1 205px; }
 .store-filters input, .store-filters select { width: 100%; }
+
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 35px;
+}
+
+.pagination-btn {
+    padding: 10px 15px;
+    border: 1px solid #5c0017;
+    border-radius: 6px;
+    background-color: white;
+    color: #5c0017;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.pagination-btn:hover:not(:disabled) {
+    background-color: #5c0017;
+    color: white;
+}
+
+.pagination-btn.active {
+    background-color: #5c0017;
+    color: white;
+    font-weight: bold;
+}
+
+.pagination-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.pagination-info {
+    text-align: center;
+    margin-top: 15px;
+    color: #716971;
+    font-size: 14px;
+}

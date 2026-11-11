@@ -60,6 +60,138 @@ async function getAllProducts(req, res, next) {
     }
 }
 
+//epistrefei proionta ana selida
+async function paginatedProducts(req, res, next) {
+
+    //an den exei dothei page, sunexizei sto palio endpoint
+    if (req.query.page === undefined) {
+        return next();
+    }
+
+    try {
+        const page = Number(req.query.page);
+        const limit = 6;
+
+        //elegxos egkurotitas selidas
+        if (
+            !Number.isSafeInteger(page) ||
+            page < 1 ||
+            typeof req.query.page !== "string"
+        ) {
+            return res.status(400).json({
+                message: "Μη έγκυρος αριθμός σελίδας."
+            });
+        }
+
+        const skip = (page - 1) * limit;
+
+        const filter = {};
+
+        //filtro kathgorias
+        if (
+            typeof req.query.category === "string" &&
+            req.query.category !== "all"
+        ) {
+            filter.category = req.query.category;
+        }
+
+        //anazhthsh proiontos
+        if (
+            typeof req.query.search === "string" &&
+            req.query.search.trim()
+        ) {
+            const search = req.query.search.trim().replace(
+                /[.*+?^${}()|[\]\\]/g,
+                "\\$&"
+            );
+
+            filter.name = {
+                $regex: search,
+                $options: "i"
+            };
+        }
+
+        //taxinomhsh
+        let sorting = { _id: 1 };
+
+        if (req.query.sort === "price-asc") {
+            sorting = { price: 1, _id: 1 };
+        }
+
+        if (req.query.sort === "price-desc") {
+            sorting = { price: -1, _id: 1 };
+        }
+
+        //sunolikos arithmos proiontwn
+        const totalProducts = await Product.countDocuments(filter);
+
+        //proionta ths sugkekrimenhs selidas
+        const products = await Product.find(filter)
+            .sort(sorting)
+            .skip(skip)
+            .limit(limit)
+            .lean();
+
+        //upologismos ratings gia ta proionta ths selidas
+        const ratings = await Review.aggregate([
+            {
+                $match: {
+                    product: {
+                        $in: products.map(p => p._id)
+                    }
+                }
+            },
+            {
+                $group: {
+                    _id: "$product",
+                    averageRating: { $avg: "$rating" },
+                    reviewCount: { $sum: 1 }
+                }
+            }
+        ]);
+
+        //dhmiourgia map me ta ratings
+        const ratingsMap = new Map(
+            ratings.map(r => [
+                String(r._id),
+                r
+            ])
+        );
+
+            //prosthikh ratings sta proionta
+            const productsWithRatings = products.map(product => {
+
+                const stats = ratingsMap.get(
+                    String(product._id)
+                );
+
+                return {
+                    ...product,
+                    averageRating: stats?.averageRating ?? 0,
+                    reviewCount: stats?.reviewCount ?? 0
+                };
+            });
+
+            //sunolikes selides
+            const totalPages = Math.max(
+                1,
+                Math.ceil(totalProducts / limit)
+            );
+
+            //epistrofh proiontwn me ratings kai pagination
+            return res.json({
+                products: productsWithRatings,
+                currentPage: page,
+                totalPages,
+                totalProducts,
+                limit
+            });
+
+    } catch (error) {
+        next(error);
+    }
+}
+
 
 async function getProductsByCategory(req, res, next) {
     if (!CATEGORIES.includes(req.params.category)) {
@@ -158,5 +290,6 @@ module.exports = {
     getProductById,
     createProduct,
     updateProduct,
-    deleteProduct
+    deleteProduct,
+    paginatedProducts
 };

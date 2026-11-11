@@ -62,6 +62,15 @@ const initialProducts = [
         description: "Χρωματιστές κάλτσες με μοντέρνο pop-art ύφος, σχεδιασμένες για άνεση και καθημερινή χρήση.",
         notes: "Ιδανικές για casual εμφανίσεις και ως πρωτότυπο δώρο για φοιτητές.",
         availability: 20
+    },
+    {
+        name: "Κάλτσες AUEB Color Pop",
+        category: "clothes",
+        price: 12,
+        image: "/assets/clothing/Pop_art_socks_new1200-1100x1100.png",
+        description: "Χρωματιστές κάλτσες με μοντέρνο pop-art ύφος, σχεδιασμένες για άνεση και καθημερινή χρήση.",
+        notes: "Ιδανικές για casual εμφανίσεις και ως πρωτότυπο δώρο για φοιτητές.",
+        availability: 20
     }
 ];
 

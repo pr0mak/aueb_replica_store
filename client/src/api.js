@@ -25,6 +25,33 @@ async function request(path, { token, ...options } = {}) {
 export const productsApi = {
 
     all: () => request("/products"),
+
+    paginated: ({
+        page = 1,
+        category = "all",
+        search = "",
+        sort = "default"
+    } = {}) => {
+
+        const params = new URLSearchParams();
+
+        params.set("page", String(page));
+
+        if (category !== "all") {
+            params.set("category", category);
+        }
+
+        if (search.trim()) {
+            params.set("search", search.trim());
+        }
+
+        if (sort !== "default") {
+            params.set("sort", sort);
+        }
+
+        return request(`/products?${params.toString()}`);
+    },
+
     one: id => request(`/products/${encodeURIComponent(id)}`),
     create: (data, token) => request("/products", {
         method: "POST",
