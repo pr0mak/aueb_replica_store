@@ -1,96 +1,225 @@
+
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 require('dotenv').config();
 
-//initialization of the 3 models
+/* ---------- Models ---------- */
 const User = require('./models/User');
 const Product = require('./models/Product');
 const Order = require('./models/Order');
 
-//arxika dedomena proiontwn
+/* ---------- Initial Products ---------- */
 const initialProducts = [
     {
-        name: "Μπλουζάκι AUEB Burgundy Edition",
+        name: "Μπλουζάκι A.S.O.E.E. 1920",
         category: "clothes",
-        price: 19,
+        price: 17,
         image: "/assets/clothing/t-shirt.jpg",
-        description: "Βαμβακερό μπλουζάκι σε μπορντό και λευκές λεπτομέρειες, εμπνευσμένο από την ταυτότητα του Οικονομικού Πανεπιστημίου Αθηνών.",
-        notes: "Διαθέσιμο σε μεγέθη S, M, L και XL. Ιδανικό για φοιτητές και αποφοίτους.",
-        availability: 15
+        description: "Βαμβακερό μπλουζάκι από 100% βαμβάκι με επετειακό λογότυπο ΑΣΟΕΕ 1920.",
+        notes: "Δημοφιλές προϊόν της περιόδου 2025-2026. Διαθέσιμα μεγέθη: S, M, L, XL.",
+        availability: 10
     },
     {
-        name: "Φοιτητικό σακίδιο Urban 22L",
+        name: "Σακίδιο πλάτης για φορητό υπολογιστή 20L",
         category: "accessories",
-        price: 34,
+        price: 29,
         image: "/assets/accessories/laptop_backpack.jpg",
-        description: "Πρακτικό σακίδιο 22 λίτρων με ευρύχωρη θήκη για laptop και επιπλέον χώρο για βιβλία και σημειώσεις.",
-        notes: "Κατάλληλο για καθημερινή χρήση στο πανεπιστήμιο. Διαθέτει πολλαπλές θήκες αποθήκευσης.",
-        availability: 8
+        description: "Σακίδιο πλάτης χωρητικότητας 20 λίτρων, κατάλληλο για φορητό υπολογιστή.",
+        notes: "Ιδανικό για καθημερινή χρήση στη σχολή. Χωρητικότητα: 20 λίτρα.",
+        availability: 10
     },
     {
-        name: "Eco Powerbank Bamboo 5000 mAh",
+        name: "Powerbank από μπαμπού 4000 mAh",
         category: "office_supplies",
-        price: 22,
+        price: 19,
         image: "/assets/office_supplies/powerbank.jpg",
-        description: "Φορητός φορτιστής με εξωτερική επένδυση από μπαμπού και χωρητικότητα 5000 mAh για φόρτιση κινητών συσκευών.",
-        notes: "Ελαφρύ και πρακτικό για μετακινήσεις και πολύωρη παραμονή στη σχολή.",
-        availability: 12
+        description: "Φορητός φορτιστής από μπαμπού χωρητικότητας 4000 mAh.",
+        notes: "Φιλικό προς το περιβάλλον υλικό (μπαμπού). Χωρητικότητα: 4000 mAh.",
+        availability: 10
     },
     {
-        name: "Γραβάτα AUEB Classic Bordeaux",
+        name: "Μπορντό γραβάτα AUEB",
         category: "accessories",
-        price: 45,
+        price: 49,
         image: "/assets/accessories/gravata.jpg",
-        description: "Κλασική γραβάτα σε βαθύ μπορντό χρώμα, κατάλληλη για επίσημες περιστάσεις και πανεπιστημιακές εκδηλώσεις.",
-        notes: "Κομψή επιλογή για τελετές αποφοίτησης, παρουσιάσεις και επαγγελματικές συναντήσεις.",
-        availability: 6
+        description: "Μπορντό γραβάτα με την ταυτότητα του Οικονομικού Πανεπιστημίου Αθηνών.",
+        notes: "Κατάλληλη για επίσημες εκδηλώσεις και τελετές. Σε χρώμα μπορντό AUEB.",
+        availability: 10
     },
     {
-        name: "Κορνίζα Αποφοίτησης University Style",
+        name: "Κορνίζα τοίχου για πτυχίο",
         category: "office_supplies",
-        price: 32,
+        price: 29,
         image: "/assets/office_supplies/korniza.jpg",
-        description: "Κομψή κορνίζα για την προβολή πτυχίου ή αναμνηστικού πιστοποιητικού από τις σπουδές.",
-        notes: "Κατάλληλη για γραφείο ή τοίχο. Μια όμορφη ιδέα δώρου για νέους αποφοίτους.",
-        availability: 9
+        description: "Κορνίζα τοίχου κατάλληλη για την παρουσίαση του πτυχίου σου.",
+        notes: "Ιδανική ως δώρο αποφοίτησης. Για τοποθέτηση σε τοίχο.",
+        availability: 10
     },
     {
-        name: "Κάλτσες AUEB Color Pop",
+        name: "Pop-art κάλτσες AUEB",
         category: "clothes",
-        price: 12,
+        price: 15,
         image: "/assets/clothing/Pop_art_socks_new1200-1100x1100.png",
-        description: "Χρωματιστές κάλτσες με μοντέρνο pop-art ύφος, σχεδιασμένες για άνεση και καθημερινή χρήση.",
-        notes: "Ιδανικές για casual εμφανίσεις και ως πρωτότυπο δώρο για φοιτητές.",
-        availability: 20
+        description: "Κάλτσες με pop-art σχέδιο και την ταυτότητα του AUEB.",
+        notes: "Ένα διασκεδαστικό αξεσουάρ για την καθημερινότητα. Σχέδιο pop-art.",
+        availability: 10
     },
     {
-        name: "Κάλτσες AUEB Color Pop",
+        name: "Flow-ζακέτα AUEB",
         category: "clothes",
-        price: 12,
-        image: "/assets/clothing/Pop_art_socks_new1200-1100x1100.png",
-        description: "Χρωματιστές κάλτσες με μοντέρνο pop-art ύφος, σχεδιασμένες για άνεση και καθημερινή χρήση.",
-        notes: "Ιδανικές για casual εμφανίσεις και ως πρωτότυπο δώρο για φοιτητές.",
-        availability: 20
+        price: 29,
+        image: "/assets/clothing/flow_zaketa.jpg",
+        description: "Μαύρη ζακέτα με λογότυπο AUEB.",
+        notes: "Μοντέρνα ζακέτα για καθημερινή χρήση.",
+        availability: 10
+    },
+    {
+        name: "T- Shirt ΟΠΑ Μαύρο",
+        category: "clothes",
+        price: 10,
+        image: "/assets/clothing/t-shirt_opa_black.jpg",
+        description: "Μαύρη κοντομάνικη με λογότυπο AUEB.",
+        notes: "Απλή κοντομάνικη για καθημερινή χρήση.",
+        availability: 10
+    },
+    {
+        name: "Θερμικό μπλουζάκι ΑΣΟΕΕ 1920 Κίτρινο",
+        category: "clothes",
+        price: 35,
+        image: "/assets/clothing/thermiko_mplouzaki_kitrino.jpg",
+        description: "Θερμικό μπλουζάκι κίτρινο.",
+        notes: "Σχεδιασμός που αγκαλιάζει το σώμα.",
+        availability: 10
+    },
+    {
+        name: "T-shirt ΟΠΑ-AUEB Φυστικί",
+        category: "clothes",
+        price: 15,
+        image: "/assets/clothing/t-shirt_opa_fistiki.jpg",
+        description: "Κοντομάνικο μπλουζάκι σε φυστικί απόχρωση.",
+        notes: "Μπλουζάκι με δίχρωμη εκτύπωση σήματος ΟΠΑ-AUEB.",
+        availability: 10
+    },
+    {
+        name: "Ζακέτα Fleece AUEB",
+        category: "clothes",
+        price: 29,
+        image: "/assets/clothing/zaketa_freece.jpg",
+        description: "Ζακέτα fleece με ψηλό λαιμό και κεντημένο το λογότυπο Α.Σ.Ο.Ε.Ε. 1920.",
+        notes: "Μια ζακέτα που συνδυάζει εργονομία, προστασία από το κρύο και διακριτικό στυλ.",
+        availability: 10
+    },
+    {
+        name: "Μπλε γραβάτα AUEB",
+        category: "accessories",
+        price: 49,
+        image: "/assets/accessories/gravata_blue.jpg",
+        description: "Μπλε γραβάτα με την ταυτότητα του Οικονομικού Πανεπιστημίου Αθηνών.",
+        notes: "Κατάλληλη για επίσημες εκδηλώσεις και τελετές. Σε χρώμα μπλε AUEB.",
+        availability: 10
+    },
+    {
+        name: "Κασκόλ AUEB",
+        category: "accessories",
+        price: 19,
+        image: "/assets/accessories/kaskol_fleece.jpg",
+        description: "Μόλις αρχίσεις να χρησιμοποιείς αυτό το μαλακό κασκόλ, θα αναρωτηθείς πώς πέρασες τους προηγούμενους χειμώνες χωρίς αυτό.",
+        notes: "Μια οικολογική προσέγγιση στα χειμερινά αξεσουάρ αφού το κασκόλ είναι κατασκευασμένο από 100% ανακυκλωμένο πολυεστέρα.",
+        availability: 10
+    },
+    {
+        name: "Καπέλο μπεζ",
+        category: "accessories",
+        price: 9,
+        image: "/assets/accessories/kapelo_mpez.jpg",
+        description: "Καπέλο Jockey σε μπέζ χρώμα, με το λογότυπο του Οικονομικού Πανεπιστημίου Αθηνών.",
+        notes: "Διαθέτει μεταλλικό μηχανισμό ρύθμισης μεγέθους.",
+        availability: 10
+    },
+    {
+        name: "Καπέλο μαύρο",
+        category: "accessories",
+        price: 9,
+        image: "/assets/accessories/kapelo_black.jpg",
+        description: "Καπέλο Jockey σε μαύρο χρώμα, με το λογότυπο του Οικονομικού Πανεπιστημίου Αθηνών.",
+        notes: "Διαθέτει μεταλλικό μηχανισμό ρύθμισης μεγέθους.",
+        availability: 10
+    },
+    {
+        name: "Καπέλο μπορντό",
+        category: "accessories",
+        price: 9,
+        image: "/assets/accessories/kapelo_mpordo.jpg",
+        description: "Καπέλο Jockey σε μπορντό χρώμα, με το λογότυπο του Οικονομικού Πανεπιστημίου Αθηνών.",
+        notes: "Διαθέτει μεταλλικό μηχανισμό ρύθμισης μεγέθους.",
+        availability: 10
+    },
+    {
+        name: "Αρωματικό κερί",
+        category: "accessories",
+        price: 5,
+        image: "/assets/office_supplies/arwmatiko_keri.jpg",
+        description: "Αρωματικό φυτικό κερί, σε τετράγωνη γυάλινη θήκη με καπάκι από μπαμπού και εκτύπωση το λογότυπο ΟΠΑ.",
+        notes: "Μυρωδιά βανίλλιας",
+        availability: 10
+    },
+    {
+        name: "USB stick",
+        category: "office_supplies",
+        price: 5,
+        image: "/assets/office_supplies/usb_stick.jpg",
+        description: "Περιστρεφόμενο USB stick με ξύλινο κορμό σε ανοιχτό φυσικό χρώμα & μεταλλικό κάλυμμα.",
+        notes: "Χωρητικότητα: 8GB",
+        availability: 10
+    },
+    {
+        name: "Anti-stress cube",
+        category: "office_supplies",
+        price: 3,
+        image: "/assets/office_supplies/anti_stress_cube.jpg",
+        description: "Αντι-στρες κύβος με το σήμα του ΟΠΑ σε λευκό και κίτρινο χρώμα.",
+        notes: "Διαστάσεις: 4,5 x 4,5 x 4,5cm",
+        availability: 10
+    },
+    {
+        name: "Θήκη για Tablet ΟΠΑ",
+        category: "office_supplies",
+        price: 38,
+        image: "/assets/office_supplies/thiki_tablet.jpg",
+        description: "Θήκη για Tablet από πυρογραφικό υλικό εξαιρετικής ποιότητας με ιδιαίτερη υφή.",
+        notes: "Διαθέτει μεγάλη τσέπη αριστερά, θέση για μπλοκ σημειώσεων δεξιά, μία ειδικά σχεδιασμένη τσέπη για Tablet.",
+        availability: 10
+    },
+    {
+        name: "Κορδόνι Λαιμού με γάντζο",
+        category: "office_supplies",
+        price: 4,
+        image: "/assets/office_supplies/kordoni_laimou.jpg",
+        description: "Υφασμάτινο κορδόνι λαιμού με γάντζο και το λογότυπο του Οικονομικού Πανεπιστημίου Αθηνών.",
+        notes: "Dimensions:50.00cm x 2.50cm x 0.00cm",
+        availability: 10
     }
 ];
 
+/* ---------- Seed Database ---------- */
 const seedDatabase = async () => {
     try {
+        /* ---------- Database Connection ---------- */
         await mongoose.connect(process.env.MONGO_URI);
         console.log('Σύνδεση στη MongoDB για Seed...');
 
-        //katharismos paliws dedomenwn
+        /* ---------- Clear Existing Data ---------- */
         await User.deleteMany({});
         await Product.deleteMany({});
         await Order.deleteMany({});
         console.log('Διαγράφηκαν τα παλιά δεδομένα.');
 
-        //dhmiorgoume hashed kwdikous gia tous xrhstes
+        /* ---------- Password Hashing ---------- */
         const saltRounds = 10;
         const adminPasswordHash = await bcrypt.hash('Admin123!', saltRounds);
         const userPasswordHash = await bcrypt.hash('User123!', saltRounds);
 
-        //eisagwgh 2 xrhstwn (1 Admin & 1 User)
+        /* ---------- Initial Users ---------- */
         await User.insertMany([
             {
                 firstname: "ADMIN",
@@ -109,14 +238,17 @@ const seedDatabase = async () => {
                 role: "user"
             }
         ]);
+
         console.log('Δημιουργήθηκαν 2 χρήστες.');
 
-        //eisagwgh 10 products
+        /* ---------- Insert Initial Products ---------- */
         await Product.insertMany(initialProducts);
-        console.log('Δημιουργήθηκαν τα αρχικά προϊόντα.');
+        console.log(`Δημιουργήθηκαν ${initialProducts.length} αρχικά προϊόντα.`);
 
+        /* ---------- Seed Completed ---------- */
         console.log('Η αρχικοποίηση (Seed) ολοκληρώθηκε με επιτυχία!');
         process.exit(0);
+
     } catch (error) {
         console.error('Σφάλμα κατά τη διάρκεια του Seed:', error);
         process.exit(1);
