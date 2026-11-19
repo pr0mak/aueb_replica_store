@@ -73,4 +73,4 @@ Password: User123!
 Email: admin@aueb.gr
 Password: Admin123!
 
-#Προτείνεται να δημιουργήσετε δικό σας λογαριασμό με υπαρκτό e-mail ώστε να δείτε το feature της αποστολής e-mail μετά την επικοιννία με το AUEB official store (http://localhost:5173/contact).
+##Προτείνεται να δημιουργήσετε δικό σας λογαριασμό με υπαρκτό e-mail ώστε να δείτε το feature της αποστολής e-mail μετά την επικοιννία με το AUEB official store (http://localhost:5173/contact).
