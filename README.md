@@ -33,6 +33,11 @@ MONGO_URI=mongodb://localhost:27017/istos?retryWrites=false
 JWT_SECRET=your_jwt_secret_here
 ```
 
+Για να δημιουργήσετε το JWT_SECRET μπορείτε να τρέξετε αυτό το command.
+```bash
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+```
+
 ### 3. Αρχικοποίηση βάσης δεδομένων(προσθήκη των products και τον user-admin)
 
 Με τη MongoDB ενεργή, εκτελούμε:
@@ -73,4 +78,4 @@ Password: User123!
 Email: admin@aueb.gr
 Password: Admin123!
 
-##Προτείνεται να δημιουργήσετε δικό σας λογαριασμό με υπαρκτό e-mail ώστε να δείτε το feature της αποστολής e-mail μετά την επικοιννία με το AUEB official store (http://localhost:5173/contact).
+## Προτείνεται να δημιουργήσετε δικό σας λογαριασμό User με υπαρκτό e-mail ώστε να δείτε το feature της αποστολής e-mail μετά την επικοινωνία με το AUEB official store (http://localhost:5173/contact).
