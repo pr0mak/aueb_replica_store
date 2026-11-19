@@ -82,8 +82,8 @@ export default function RegisterPage() {
         {error && <p className="alert error" role="alert">{error}</p>}
         <form className="form-fields" onSubmit={submit} noValidate>
             <div className="form-two-col">
-                <label>Όνομα *<input name="firstname" required pattern="[Α-Ω]+([ -][Α-Ω]+)*" title="Κεφαλαία ελληνικά χωρίς τόνους" value={form.firstname} onChange={change}/>{hint("firstname")}</label>
-                <label>Επώνυμο *<input name="lastname" required pattern="[Α-Ω]+([ -][Α-Ω]+)*" title="Κεφαλαία ελληνικά χωρίς τόνους" value={form.lastname} onChange={change}/>{hint("lastname")}</label>
+                <label>Όνομα *<input name="firstname" required pattern="[Α-Ω]+([ -][Α-Ω]+)*" title="Κεφαλαία ελληνικά χωρίς τόνους" value={form.firstname} onChange={change} placeholder="πχ. ΓΙΩΡΓΟΣ"/>{hint("firstname")}</label>
+                <label>Επώνυμο *<input name="lastname" required pattern="[Α-Ω]+([ -][Α-Ω]+)*" title="Κεφαλαία ελληνικά χωρίς τόνους" value={form.lastname} onChange={change} placeholder="πχ. ΠΑΠΑΔΟΠΟΥΛΟΣ"/>{hint("lastname")}</label>
             </div>
             <label>Κινητό *<input name="phone" type="tel" required pattern="69[0-9]{8}" value={form.phone} onChange={change} placeholder="6912345678" />{hint("phone")}</label>
             <label>Email *<input name="email" type="email" required maxLength="254" value={form.email} onChange={change} placeholder="example@aueb.gr" autoComplete="email" />{hint("email")}</label>

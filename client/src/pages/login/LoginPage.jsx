@@ -40,7 +40,7 @@ export default function LoginPage() {
 
         <form onSubmit={submit} className="form-fields">
 
-            <label>Email<input type="email" required autoComplete="email" value={email} placeholder="example@aueb.gr" onChange={e=>setEmail(e.target.value)} /></label>
+            <label>Email<input type="email" required autoComplete="email" value={email} onChange={e=>setEmail(e.target.value)} /></label>
             
             <label>Κωδικός πρόσβασης<input type="password" required autoComplete="current-password" value={password} onChange={e=>setPassword(e.target.value)} /></label>
             
