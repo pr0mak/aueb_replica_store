@@ -65,12 +65,12 @@ http://localhost:5173
 
 ## Λογαριασμοί δοκιμής
 
-### Administrator
-Email: admin@aueb.gr
-
-Password: Admin123!
-
 ### User
 Email: user@aueb.gr
 
 Password: User123!
+
+### Administrator
+Email: admin@aueb.gr
+
+Password: Admin123!
