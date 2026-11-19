@@ -14,7 +14,10 @@
 - Node.js και npm
 - MongoDB
 
-### 1. Εγκατάσταση Backend
+### 1. Setup νέο connection στο MongoDB Compass 
+<img width="1236" height="632" alt="image" src="https://github.com/user-attachments/assets/f2e829f2-8061-4fa4-b96a-fbaa8864431f" />
+
+### 2. Εγκατάσταση Backend
 
 Ανοίγουμε terminal στον φάκελο server:
 
@@ -23,7 +26,7 @@ cd server
 npm install
 ```
 
-### 2. Ρύθμιση .env
+### 3. Ρύθμιση .env
 
 Δημιουργούμε αρχείο server/.env ακολουθόντας το template του .env.example:
 
@@ -38,7 +41,7 @@ JWT_SECRET=your_jwt_secret_here
 node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 ```
 
-### 3. Αρχικοποίηση βάσης δεδομένων(προσθήκη των products και τον user-admin)
+### 4. Αρχικοποίηση βάσης δεδομένων(προσθήκη των products και τον user-admin)
 
 Με τη MongoDB ενεργή, εκτελούμε:
 
@@ -46,7 +49,7 @@ node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 npm run seed
 ```
 
-### 4. Εκκίνηση Backend
+### 5. Εκκίνηση Backend
 
 ```bash
 npm run dev
@@ -54,7 +57,7 @@ npm run dev
 
 Ο backend server εκτελείται στη θύρα 5000.
 
-### 5. Εγκατάσταση και εκκίνηση Frontend
+### 6. Εγκατάσταση και εκκίνηση Frontend
 
 Σε δεύτερο terminal:
 
